@@ -1,4 +1,4 @@
-package escampe;
+package org.example;
 
 
 /**
