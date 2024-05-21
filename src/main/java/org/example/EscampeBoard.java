@@ -2,6 +2,7 @@ package org.example;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +10,7 @@ public class EscampeBoard implements Partie1 {
 
     //PRIVATE ATTRIBUTES
     private Case[][] board;
+    private ArrayList<Coup> coups;
 
     //CONSTRUCTOR
     public EscampeBoard() {
