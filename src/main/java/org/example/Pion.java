@@ -4,10 +4,12 @@ public class Pion {
 
     //PRIVATE INTERFACE
     private String type;
+    private int playerId;
 
     //CONSTRUCTOR
-    public Pion(String type) {
+    public Pion(String type, int playerId) {
         this.type = type;
+        this.playerId = playerId;
     }
 
     //PUBLIC INTERFACE
@@ -15,8 +17,8 @@ public class Pion {
         return type;
     }
 
-    public void setType(String type) {
-        this.type = type;
+    public int getPlayerId() {
+        return playerId;
     }
 
     //PUBLIC CONSTANTS
