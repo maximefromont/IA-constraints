@@ -22,9 +22,4 @@ public class Case {
     public int getValue() {
         return value;
     }
-
-    public void setValue(int value) {
-        if(value < 0 || value > 3) throw new IllegalArgumentException("Value must be between 0 and 3");
-        this.value = value;
-    }
 }
