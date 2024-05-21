@@ -1,4 +1,9 @@
 package org.example;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class EscampeBoard implements Partie1 {
 
@@ -56,7 +61,46 @@ public class EscampeBoard implements Partie1 {
 
     @Override
     public void setFromFile(String fileName) {
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(fileName));
+            List<String> lines = new ArrayList<>();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                lines.add(line);
+            }
+            reader.close();
 
+            for (int row = 1; row < lines.size() - 1; row++) {
+                line = lines.get(row);
+                for (int col = 3; col < line.length() - 3; col++) {
+                    char c = line.charAt(col);
+                    switch (c) {
+                        case 'N':
+                            System.out.println("white licorne");
+                            System.out.println("row: " + (row-1) + " col: " + (col-3));
+                            board[row-1][col-3].setPion(new Pion(Pion.PION_TYPE_LICORNE, 1));
+                            break;
+                        case 'n':
+                            System.out.println("white paladium");
+                            System.out.println("row: " + (row-1) + " col: " + (col-3));
+                            board[row-1][col-3].setPion(new Pion(Pion.PION_TYPE_PALADIN, 1));
+                            break;
+                        case 'B':
+                            System.out.println("black licorne");
+                            System.out.println("row: " + (row-1) + " col: " + (col-3));
+                            board[row-1][col-3].setPion(new Pion(Pion.PION_TYPE_LICORNE, 2));
+                            break;
+                        case 'b':
+                            System.out.println("black paladium");
+                            System.out.println("row: " + (row-1) + " col: " + (col-3));
+                            board[row-1][col-3].setPion(new Pion(Pion.PION_TYPE_PALADIN, 2));
+                            break;
+                    }
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
