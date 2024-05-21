@@ -5,5 +5,6 @@ public class Main {
         EscampeBoard escampeBoard = new EscampeBoard();
         escampeBoard.printBoard();
         escampeBoard.setFromFile("/home/kevin/Cour/résolution de contrainte/projet/demo1_board.txt");
+        escampeBoard.printBoardWithPion();
     }
 }

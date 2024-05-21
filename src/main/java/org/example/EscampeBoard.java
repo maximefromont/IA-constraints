@@ -137,6 +137,19 @@ public class EscampeBoard implements Partie1 {
         }
     }
 
+    public void printBoardWithPion() {
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            for (int j = 0; j < BOARD_SIZE; j++) {
+                if (board[i][j].getPion() != null) {
+                    System.out.print(board[i][j].getPion().getType() + " ");
+                } else {
+                    System.out.print(board[i][j].getValue() + " ");
+                }
+            }
+            System.out.println();
+        }
+    }
+
     //PRIVATE CONSTANTS
     private static final int BOARD_SIZE = 6;
 }
