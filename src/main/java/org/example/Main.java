@@ -6,5 +6,6 @@ public class Main {
         escampeBoard.printBoard();
         escampeBoard.setFromFile("/home/kevin/Cour/résolution de contrainte/projet/demo1_board.txt");
         escampeBoard.printBoardWithPion();
+        escampeBoard.saveToFile("/home/kevin/Cour/résolution de contrainte/projet/demo2_board.txt");
     }
 }
