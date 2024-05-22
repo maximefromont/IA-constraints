@@ -1,18 +1,24 @@
 package org.example;
+import org.example.move.Move;
+import org.example.move.PositionMove;
+import org.example.move.RegularMove;
+
 import java.io.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.lang.StrictMath.abs;
 
 public class EscampeBoard implements Partie1 {
 
     //PRIVATE ATTRIBUTES
 
-    private ArrayList<Coup> coups;
+    private ArrayList<Move> move;
     private Case[][] boardArray;
+    private int lastLisere;
 
     //CONSTRUCTOR
     public EscampeBoard() {
@@ -153,12 +159,80 @@ public class EscampeBoard implements Partie1 {
 
     @Override
     public boolean isValidMove(String move, String player) {
-        return false;
+        PositionMove positionMove;
+        Coordinate[] coordinateMoves;
+        switch (playedCoups()){
+            case 0:
+                positionMove = PositionMove.fromString(move,2);
+                coordinateMoves = positionMove.getCoordinates();
+                if (coordinateMoves[0].getX()<2) {
+                    for (int i = 0; i < 6; i++) {
+                        if(coordinateMoves[i].getX()>=2){
+                            return false;
+                        }                    }
+                }else{
+                    for (int i = 0; i < 6; i++) {
+                        if(coordinateMoves[i].getX()<=3){
+                            return false;
+                        }
+                    }
+                }
+                return  true;
+            case 1:
+
+                if (this.move.getFirst() instanceof PositionMove) {
+                    Coordinate firstMoveCoordinate = ((PositionMove) this.move.getFirst()).getCoordinates()[0];
+                    positionMove = PositionMove.fromString(move,2);
+                    coordinateMoves = positionMove.getCoordinates();
+
+
+                    if (firstMoveCoordinate.getX() <2) {
+                        for (int i = 0; i < 6; i++) {
+                            if(coordinateMoves[i].getX()>3){
+                                return false;
+                            }
+                        }
+
+
+                    } else  {
+                        for (int i = 0; i < 6; i++) {
+                            if(coordinateMoves[i].getX()<2){
+                                return false;
+                            }
+                        }
+                    }
+
+
+
+
+                }
+
+
+
+
+
+                return true;
+
+
+
+
+            default:
+                //test if the la
+                return  false;
+
+
+        }
+
+
     }
 
     @Override
     public String[] possiblesMoves(String player) {
         return new String[0];
+    }
+
+    public int  playedCoups(){
+        return move.size();
     }
 
     @Override
@@ -170,6 +244,180 @@ public class EscampeBoard implements Partie1 {
     public boolean gameOver() {
         return false;
     }
+
+    //***PERSONNAL FUNCTION*/
+
+    public boolean isFree(Coordinate coordinate) {
+        return boardArray[coordinate.getX()][coordinate.getY()].getPion() == null;
+    }
+
+    public boolean isInBoard(Coordinate coordinate) {
+        return coordinate.getX() >= 0 && coordinate.getX() < BOARD_SIZE && coordinate.getY() >= 0 && coordinate.getY() < BOARD_SIZE;
+    }
+
+    public boolean isValidMove(Move move, String player) {
+        //make a switch case to test the type of the move
+        switch (move.getClass().getName()) {
+            case "org.example.move.PositionMove":
+
+                for (int i = 0; i < 6; i++) {
+                    for (int j = i + 1; j < 6; j++) {
+                        if (((PositionMove) move).getCoordinates()[i].equals(((PositionMove) move).getCoordinates()[j])) {
+                            return false;
+                        }
+                    }
+                }
+                //test if the player is the right one
+                if (player.equals("noir")) {
+
+                    //check if the coordinates are in the right place
+                    if (((PositionMove) move).getCoordinates()[0].getX() < 2) {
+                        for (int i = 0; i < 6; i++) {
+                            if (((PositionMove) move).getCoordinates()[i].getX() >= 2) {
+                                return false;
+                            }
+                        }
+                    } else {
+                        for (int i = 0; i < 6; i++) {
+                            if (((PositionMove) move).getCoordinates()[i].getX() <= 3) {
+                                return false;
+                            }
+                        }
+                    }
+
+
+                }
+                else if (player.equals("blanc")) {
+                    //chekc if the first this.move is a positionmove
+                    if (this.move.size() == 0) {
+                        return true;
+                    } else if (this.move.getFirst() instanceof PositionMove) {
+                        Coordinate firstMoveCoordinate = ((PositionMove) this.move.getFirst()).getCoordinates()[0];
+                        for (int i = 0; i < 6; i++) {
+                            if (firstMoveCoordinate.getX() < 2) {
+                                if (((PositionMove) move).getCoordinates()[i].getX() > 3) {
+                                    return false;
+                                }
+                            } else {
+                                if (((PositionMove) move).getCoordinates()[i].getX() < 2) {
+                                    return false;
+                                }
+                            }
+                        }
+
+                    } else {
+                        return false;
+                    }
+
+
+                }
+
+            case "org.example.move.RegularMove":
+                //convert the move to a regular move
+                assert move instanceof RegularMove;
+                RegularMove regularMove = (RegularMove) move;
+                switch (lastLisere){
+                    case 1:
+                        return this.isFree(regularMove.getEndCoordinate());
+                    case 2:
+                        //test if the final case is free
+                        if(!this.isFree(regularMove.getEndCoordinate())){
+                            return false;
+                        }
+                        //test if the intermediate case is free
+                        else if(regularMove.getMove().equals(new Coordinate(0,2))){
+                            //test if the intermediate case is free
+                            return this.isFree(new Coordinate(regularMove.getStartCoordinate().getX(),regularMove.getStartCoordinate().getY()+1));
+                        }
+                        else if (regularMove.getMove().equals(new Coordinate(0,-2))){
+                            return this.isFree(new Coordinate(regularMove.getStartCoordinate().getX(),regularMove.getStartCoordinate().getY()-1));
+                        }
+                        else if (regularMove.getMove().equals(new Coordinate(2,0))){
+                            return this.isFree(new Coordinate(regularMove.getStartCoordinate().getX()+1,regularMove.getStartCoordinate().getY()));
+                        }
+                        else if (regularMove.getMove().equals(new Coordinate(-2,0))){
+                            return this.isFree(new Coordinate(regularMove.getStartCoordinate().getX()-1,regularMove.getStartCoordinate().getY()));
+                        }else if(regularMove.getMove().equals(new Coordinate(-1,1))) {
+                            return this.isFree(new Coordinate(regularMove.getStartCoordinate().getX()-1,regularMove.getStartCoordinate().getY())) ||
+                                    this.isFree(new Coordinate(regularMove.getStartCoordinate().getX(),regularMove.getStartCoordinate().getY()+1));
+                        }else if(regularMove.getMove().equals(new Coordinate(1,-1))) {
+                            return this.isFree(new Coordinate(regularMove.getStartCoordinate().getX()+1,regularMove.getStartCoordinate().getY())) ||
+                                    this.isFree(new Coordinate(regularMove.getStartCoordinate().getX(),regularMove.getStartCoordinate().getY()-1));
+                        }else if(regularMove.getMove().equals(new Coordinate(1,1))) {
+                            return this.isFree(new Coordinate(regularMove.getStartCoordinate().getX()+1,regularMove.getStartCoordinate().getY())) ||
+                                    this.isFree(new Coordinate(regularMove.getStartCoordinate().getX(),regularMove.getStartCoordinate().getY()+1));
+                        }else if(regularMove.getMove().equals(new Coordinate(-1,-1))) {
+                            return this.isFree(new Coordinate(regularMove.getStartCoordinate().getX()-1,regularMove.getStartCoordinate().getY())) ||
+                                    this.isFree(new Coordinate(regularMove.getStartCoordinate().getX(),regularMove.getStartCoordinate().getY()-1));
+                        }
+                        else {
+                            return false;
+                        }
+
+
+                }
+            default:
+                return false;
+        }
+
+
+    }
+
+    //get all the possible moves for a prawn at a given position
+    public RegularMove[] possibleMovesPaw(String player, Case startCase, Coordinate position) {
+        int playerId = player.equals("blanc") ? 1 : 2;
+
+        //get the Case position value
+        int currentLisere = startCase.getValue();
+        RegularMove[] potentionalMoves;
+        switch (currentLisere){
+            case 1:
+                for (int i = 0; i < 2; i++) {
+                    for (int j = 0; j < 2; j++) {
+                        if (isInBoard(new Coordinate(position.getX() + i, position.getY() + j))) {
+                            if (isFree(new Coordinate(position.getX() + i, position.getY() + j))) {
+                                potentionalMoves = new RegularMove[1];
+                                potentionalMoves[0] = new RegularMove(new Coordinate(position.getX(), position.getY()), new Coordinate(position.getX() + i, position.getY() + j), playerId);
+                                return potentionalMoves;
+                            }
+                        }
+
+                    }
+
+                }
+                case 2:
+                    potentionalMoves = new RegularMove[8];
+                    int index = 0;
+                    for (int i = -2; i <= 2; i++) {
+                        for (int j = -2; j <= 2; j++) {
+                            if (abs(i) + abs(j) == 2) {
+                                if (isInBoard(new Coordinate(position.getX() + i, position.getY() + j))) {
+                                    if (isFree(new Coordinate(position.getX() + i, position.getY() + j))) {
+                                        potentionalMoves[index] = new RegularMove(new Coordinate(position.getX(), position.getY()), new Coordinate(position.getX() + i, position.getY() + j), playerId);
+                                        index++;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    return potentionalMoves;
+
+            default:
+                    return null;
+
+
+
+
+        }
+
+
+
+
+    }
+
+
+
+
 
     public void printBoard() {
         for (int i = 0; i < BOARD_SIZE; i++) {
@@ -200,7 +448,7 @@ public class EscampeBoard implements Partie1 {
                     }
 
                 } else {
-                    System.out.print(boardArray[i][j].getValue() + " ");
+                    System.out.print("- ");
                 }
             }
             System.out.println();
@@ -237,4 +485,33 @@ public class EscampeBoard implements Partie1 {
 
     //PRIVATE CONSTANTS
     private static final int BOARD_SIZE = 6;
+
+
+    //add main
+    public static void main(String[] args) {
+        EscampeBoard escampeBoard = new EscampeBoard();
+        System.out.println("lisere map :");
+        escampeBoard.printBoard();
+        System.out.println();
+        escampeBoard.printBoardWithPion();
+       escampeBoard.setFromFile("/home/kevin/Cour/résolution de contrainte/projet/demo1_board.txt");
+        System.out.println();
+       System.out.println("board after load file :");
+       escampeBoard.printBoardWithPion();
+
+       //test possible move for pion in 0,0
+        RegularMove[] moves = escampeBoard.possibleMovesPaw("blanc",escampeBoard.boardArray[0][0],new Coordinate(0,0));
+        for (RegularMove move : moves) {
+            System.out.println("possible move for A1 :"+move.toString());
+        }
+
+
+
+
+
+
+
+//        escampeBoard.setFromFile("test.txt");
+//        escampeBoard.printBoardWithPion();
+    }
 }
