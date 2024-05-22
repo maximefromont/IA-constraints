@@ -9,7 +9,7 @@ public class Node {
     private int depth;
     private EscampeBoard board;
 
-    public Node(Node[] children, int[] values, String move, int depth, int maxDepth) {
+    public Node(Node[] children, int[] values, String move, int depth, int maxDepth, EscampeBoard board) {
         if(depth < maxDepth) {
             this.children = children; // this should be allowed moves within the max depth
         } else {
@@ -18,15 +18,17 @@ public class Node {
         this.values = values; // Valeurs de nos heuristiques
         this.move = move;
         this.depth = depth;
+        this.board = board;
     }
 
-    public Node(Node[] children, int[] values, String move, int maxDepth) {
+    public Node(Node[] children, int[] values, String move, int maxDepth, EscampeBoard board) {
         if(depth < maxDepth) {
             this.children = children; // this should be allowed moves within the max depth
         }
         this.values = values; // Valeurs de nos heuristiques
         this.move = move;
         this.depth = 0;
+        this.board = board;
     }
 
     public Node[] getChildren() {

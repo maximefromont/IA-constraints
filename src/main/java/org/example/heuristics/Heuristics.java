@@ -1,5 +1,13 @@
 package org.example.heuristics;
 
-public class Heuristics {
+import org.example.EscampeBoard;
 
+public class Heuristics {
+    public int mobilityHeuristic(EscampeBoard board, String player){
+        String opponent = "noir";
+        if(player.equals("noir")){
+            opponent = "blanc";
+        }
+        return board.possiblesMoves(player).length - board.possiblesMoves(opponent).length;
+    }
 }
