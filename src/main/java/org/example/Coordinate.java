@@ -23,7 +23,7 @@ public class Coordinate {
     //override the toString method
 
     public String toString() {
-        return (char)('A' + x) + "" + (y + 1);
+        return (char)('A' + y) + "" + (x + 1);
     }
 
     //add equals method
