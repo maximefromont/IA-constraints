@@ -1,14 +1,19 @@
 package org.example.util;
 
+import org.example.EscampeBoard;
+
 public class Node {
     private Node[] children;
     private int[] values;
     private String move;
     private int depth;
+    private EscampeBoard board;
 
     public Node(Node[] children, int[] values, String move, int depth, int maxDepth) {
         if(depth < maxDepth) {
             this.children = children; // this should be allowed moves within the max depth
+        } else {
+            this.children = null;
         }
         this.values = values; // Valeurs de nos heuristiques
         this.move = move;
