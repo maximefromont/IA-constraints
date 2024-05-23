@@ -1,12 +1,20 @@
 package org.example.move;
 
-public interface Move {
-    //create a move from a string and a playerId
-    public static Move fromString(String move, int playerId) {
-        return null;
+import org.example.enums.TEAM_COLOR;
+
+public class Move {
+
+    //PRIVATE ATTRIBTUE
+    private TEAM_COLOR teamColor;
+
+    //CONSTRUCTOR
+    public Move(TEAM_COLOR teamColor) {
+        this.teamColor = teamColor;
     }
 
-    public String toString();
-
+    //PUBLIC INTERFACE
+    public TEAM_COLOR getTeamColor() {
+        return teamColor;
+    }
 
 }

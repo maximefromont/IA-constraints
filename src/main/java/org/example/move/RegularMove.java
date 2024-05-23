@@ -1,48 +1,44 @@
 package org.example.move;
 
 import org.example.Coordinate;
+import org.example.enums.TEAM_COLOR;
 
-public class RegularMove implements  Move{
+public class RegularMove extends Move{
+
     //PRIVATE ATTRIBUTE
-    private final Coordinate startCoordinate;
-    private final Coordinate endCoordinate;
-    private final Coordinate move;
-    private final int playerId;
+    private Coordinate startCoordinate;
+    private Coordinate endCoordinate;
+    private Coordinate move;
 
-    //CONSTRUCTOR
-    public RegularMove(Coordinate startCoordinate, Coordinate endCoordinate, int playerId) {
+    //CONSTRUCTORS
+    public RegularMove(Coordinate startCoordinate, Coordinate endCoordinate, TEAM_COLOR teamColor) {
+        super(teamColor);
         this.startCoordinate = startCoordinate;
         this.endCoordinate = endCoordinate;
         this.move = startCoordinate.move(endCoordinate);
-        this.playerId = playerId;
-    }
-
-    @Override
-    public String toString() {
-        return startCoordinate.toString() + "-" + endCoordinate.toString();
     }
 
 
-    public static RegularMove fromString(String move, int playerId) {
+    public RegularMove(String move, TEAM_COLOR teamColor) {
+        super(teamColor);
         //split the move string into two coordinates the string are in the format B1-B2
         String[] coordinates = move.split("-");
         Coordinate startCoordinate = new Coordinate(coordinates[0]);
         Coordinate endCoordinate = new Coordinate(coordinates[1]);
-        return new RegularMove(startCoordinate, endCoordinate, playerId);
     }
 
 
     //PUBLIC INTERFACE
+    @Override
+    public String toString() {
+        return startCoordinate.toString() + "-" + endCoordinate.toString();
+    }
     public Coordinate getStartCoordinate() {
         return startCoordinate;
     }
 
     public Coordinate getEndCoordinate() {
         return endCoordinate;
-    }
-
-    public int getPlayerId() {
-        return playerId;
     }
 
     public Coordinate getMove() {

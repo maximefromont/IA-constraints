@@ -1,29 +1,30 @@
 package org.example.move;
 import org.example.Coordinate;
+import org.example.enums.TEAM_COLOR;
 
 
-public class PositionMove implements Move{
+public class PositionMove extends Move{
+
     //PRIVATE ATTRIBUTE add an array of 6 coordinates
-    private final Coordinate[] coordinates;
-    private final int playerId;
+    private Coordinate[] coordinates;
 
-    //CONSTRUCTOR
-    public PositionMove(Coordinate[] coordinates, int playerId) {
+    //CONSTRUCTORS
+    public PositionMove(Coordinate[] coordinates, TEAM_COLOR teamColor) {
+        super(teamColor);
         this.coordinates = coordinates;
-        this.playerId = playerId;
     }
 
-    public static PositionMove fromString(String move, int playerId) {
+    public PositionMove(String move, TEAM_COLOR teamColor) {
+        super(teamColor);
         //split the move string into two coordinates the string are in the format B1/B2/B3/B4/B5/B6
         String[] coordinates = move.split("/");
         Coordinate[] coordinatesArray = new Coordinate[6];
         for (int i = 0; i < 6; i++) {
             coordinatesArray[i] = new Coordinate(coordinates[i]);
         }
-        return new PositionMove(coordinatesArray, playerId);
-
     }
 
+    //PUBLIC INTERFACE
     @Override
     public String toString() {
         String result = "";
@@ -33,20 +34,7 @@ public class PositionMove implements Move{
         return result.substring(0, result.length() - 1);
     }
 
-    //PUBLIC INTERFACE
     public Coordinate[] getCoordinates() {
         return coordinates;
     }
-
-    public int getPlayerId() {
-        return playerId;
-    }
-
-
-
-
-
-
-
-
 }

@@ -159,7 +159,7 @@ public class EscampeBoard implements Partie1 {
         Coordinate[] coordinateMoves;
         switch (playedCoups()){
             case 0:
-                positionMove = PositionMove.fromString(move,2);
+                positionMove = new PositionMove(move, TEAM_COLOR.WHITE_TEAM);
                 coordinateMoves = positionMove.getCoordinates();
                 if (coordinateMoves[0].getX()<2) {
                     for (int i = 0; i < 6; i++) {
@@ -178,7 +178,7 @@ public class EscampeBoard implements Partie1 {
 
                 if (this.move.getFirst() instanceof PositionMove) {
                     Coordinate firstMoveCoordinate = ((PositionMove) this.move.getFirst()).getCoordinates()[0];
-                    positionMove = PositionMove.fromString(move,2);
+                    positionMove = new PositionMove(move, TEAM_COLOR.WHITE_TEAM);
                     coordinateMoves = positionMove.getCoordinates();
 
 
@@ -466,7 +466,7 @@ public class EscampeBoard implements Partie1 {
 
     //get all the possible moves for a prawn at a given position
     public RegularMove[] possibleMovesPaw(String player, Coordinate position) {
-        int playerId = player.equals("blanc") ? 1 : 2;
+        TEAM_COLOR playerColor = player.equals("blanc") ? TEAM_COLOR.BLACK_TEAM : TEAM_COLOR.WHITE_TEAM;
 
         //get the Case position value
         int currentLisere = this.boardArray[position.getX()][position.getY()].getValue();
@@ -480,7 +480,7 @@ public class EscampeBoard implements Partie1 {
                         if (isInBoard(new Coordinate(position.getX() + i, position.getY() + j))) {
                             if (isFree(new Coordinate(position.getX() + i, position.getY() + j))) {
                                 potentionalMoves = new RegularMove[1];
-                                potentionalMoves[0] = new RegularMove(new Coordinate(position.getX(), position.getY()), new Coordinate(position.getX() + i, position.getY() + j), playerId);
+                                potentionalMoves[0] = new RegularMove(new Coordinate(position.getX(), position.getY()), new Coordinate(position.getX() + i, position.getY() + j), playerColor);
                                 return potentionalMoves;
                             }
                         }
@@ -498,9 +498,9 @@ public class EscampeBoard implements Partie1 {
 
 
                                     //test if the move is valid
-                                    if (isValidMove(new RegularMove(position, new Coordinate(position.getX() + i, position.getY() + j), playerId), player)) {
+                                    if (isValidMove(new RegularMove(position, new Coordinate(position.getX() + i, position.getY() + j), playerColor), player)) {
 
-                                        potentionalMoves[index] = new RegularMove(new Coordinate(position.getX(), position.getY()), new Coordinate(position.getX() + i, position.getY() + j), playerId);
+                                        potentionalMoves[index] = new RegularMove(new Coordinate(position.getX(), position.getY()), new Coordinate(position.getX() + i, position.getY() + j), playerColor);
                                         index++;
                                     }
 //
@@ -519,8 +519,8 @@ public class EscampeBoard implements Partie1 {
                                     //test if the move is valid
                                     //potentionalMoves[index] = new RegularMove(new Coordinate(position.getX(), position.getY()), new Coordinate(position.getX() + i, position.getY() + j), playerId);
                                    // index++;
-                                    if (isValidMove(new RegularMove(position, new Coordinate(position.getX() + i, position.getY() + j), playerId), player)) {
-                                        potentionalMoves[index] = new RegularMove(new Coordinate(position.getX(), position.getY()), new Coordinate(position.getX() + i, position.getY() + j), playerId);
+                                    if (isValidMove(new RegularMove(position, new Coordinate(position.getX() + i, position.getY() + j), playerColor), player)) {
+                                        potentionalMoves[index] = new RegularMove(new Coordinate(position.getX(), position.getY()), new Coordinate(position.getX() + i, position.getY() + j), playerColor);
                                         index++;
                                     }
                                 }
