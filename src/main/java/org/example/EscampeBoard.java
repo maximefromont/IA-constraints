@@ -1,5 +1,6 @@
 package org.example;
-import com.sun.tools.jconsole.JConsoleContext;
+import org.example.enums.PIECE_TYPE;
+import org.example.enums.TEAM_COLOR;
 import org.example.move.Move;
 import org.example.move.PositionMove;
 import org.example.move.RegularMove;
@@ -12,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.StrictMath.abs;
-import static java.lang.StrictMath.exp;
 
 public class EscampeBoard implements Partie1 {
 
@@ -89,18 +89,17 @@ public class EscampeBoard implements Partie1 {
                     switch (c) {
                         case 'N':
 
-                            boardArray[row-1][col-3].setPion(new Pion(Pion.PION_TYPE_LICORNE, 1));
+                            boardArray[row-1][col-3].setPiece(new Piece(PIECE_TYPE.LICORNE, TEAM_COLOR.BLACK_TEAM));
                             break;
                         case 'n':
-
-                            boardArray[row-1][col-3].setPion(new Pion(Pion.PION_TYPE_PALADIN, 1));
+                            boardArray[row-1][col-3].setPiece(new Piece(PIECE_TYPE.PALADIN, TEAM_COLOR.BLACK_TEAM));
                             break;
                         case 'B':
-                            boardArray[row-1][col-3].setPion(new Pion(Pion.PION_TYPE_LICORNE, 2));
+                            boardArray[row-1][col-3].setPiece(new Piece(PIECE_TYPE.LICORNE, TEAM_COLOR.WHITE_TEAM));
                             break;
                         case 'b':
 
-                            boardArray[row-1][col-3].setPion(new Pion(Pion.PION_TYPE_PALADIN, 2));
+                            boardArray[row-1][col-3].setPiece(new Piece(PIECE_TYPE.PALADIN, TEAM_COLOR.WHITE_TEAM));
                             break;
                     }
                 }
@@ -245,7 +244,7 @@ public class EscampeBoard implements Partie1 {
     //***PERSONNAL FUNCTION*/
 
     public boolean isFree(Coordinate coordinate) {
-        return boardArray[coordinate.getX()][coordinate.getY()].getPion() == null;
+        return boardArray[coordinate.getX()][coordinate.getY()].getPiece() == null;
     }
 
     public boolean isInBoard(Coordinate coordinate) {
@@ -690,15 +689,25 @@ public class EscampeBoard implements Partie1 {
             System.out.print("0" + (i + 1) + " |");
 
             for (int j = 0; j < BOARD_SIZE; j++) {
-                if (boardArray[i][j].getPion() != null) {
-                    if (boardArray[i][j].getPion().getPlayerId() == 1) {
-                        if (boardArray[i][j].getPion().getType().equals(Pion.PION_TYPE_LICORNE)) {
-                            System.out.print("N ");
+                Piece currentPiece = boardArray[i][j].getPiece();
+                if (currentPiece != null) {
+                    System.out.print(currentPiece.getPieceType().getStringAccordingToPieceType(currentPiece.getPlayerTeamColor().toString()) + " ");
+                } else {
+                    System.out.print("- ");
+                }
+            }
+
+            /*
+            for (int j = 0; j < BOARD_SIZE; j++) {
+                if (boardArray[i][j].getPiece() != null) {
+                    if (boardArray[i][j].getPiece().getPlayerTeamColor() == TEAM_COLOR.BLACK_TEAM) {
+                        if (boardArray[i][j].getPiece().getPieceType() == PIECE_TYPE.LICORNE) {
+                            System.out.print(TEAM_COLOR.BLACK_TEAM.toString().toUpperCase() + " ");
                         } else {
-                            System.out.print("n ");
+                            System.out.print(TEAM_COLOR.BLACK_TEAM.toString() + " ");
                         }
                     } else {
-                        if (boardArray[i][j].getPion().getType().equals(Pion.PION_TYPE_LICORNE)) {
+                        if (boardArray[i][j].getPiece().getPieceType().equals(PIECE_TYPE.LICORNE)) {
                             System.out.print("B ");
                         } else {
                             System.out.print("b ");
@@ -709,6 +718,7 @@ public class EscampeBoard implements Partie1 {
                     System.out.print("- ");
                 }
             }
+             */
             System.out.println();
         }
     }
@@ -743,33 +753,35 @@ public class EscampeBoard implements Partie1 {
                     }
                 }
 
+                Piece currentPiece = boardArray[i][j].getPiece();
 
-
-
-
-                if (boardArray[i][j].getPion() != null) {
+                if (currentPiece != null) {
 
                     if(isPossible) {
                         //test if the pion is a licorne
-                        if (boardArray[i][j].getPion().getType().equals(Pion.PION_TYPE_LICORNE)) {
+                        if (currentPiece.getPieceType() == PIECE_TYPE.LICORNE) {
                             System.out.print("X ");
                         } else {
                             System.out.print("E ");
                         }
+                    } else {
+                        System.out.print(currentPiece.getPieceType().getStringAccordingToPieceType(currentPiece.getPlayerTeamColor().toString()) + " ");
                     }
-                    else if (boardArray[i][j].getPion().getPlayerId() == 1) {
-                        if (boardArray[i][j].getPion().getType().equals(Pion.PION_TYPE_LICORNE)) {
+                    /*
+                    else if (boardArray[i][j].getPiece().getPlayerId() == 1) {
+                        if (boardArray[i][j].getPiece().getType().equals(Piece.PION_TYPE_LICORNE)) {
                             System.out.print("N ");
                         } else {
                             System.out.print("n ");
                         }
                     } else {
-                        if (boardArray[i][j].getPion().getType().equals(Pion.PION_TYPE_LICORNE)) {
+                        if (boardArray[i][j].getPiece().getType().equals(Piece.PION_TYPE_LICORNE)) {
                             System.out.print("B ");
                         } else {
                             System.out.print("b ");
                         }
                     }
+                     */
 
                 } else {
                     if(isPossible) {
@@ -789,25 +801,34 @@ public class EscampeBoard implements Partie1 {
         String res = "";
         for (int i = 0; i < BOARD_SIZE; i++) {
             for (int j = 0; j < BOARD_SIZE; j++) {
-                if (boardArray[i][j].getPion() != null) {
-                    if (boardArray[i][j].getPion().getPlayerId() == 1) {
-                        if (boardArray[i][j].getPion().getType().equals(Pion.PION_TYPE_LICORNE)) {
+
+                Piece currentPiece = boardArray[i][j].getPiece();
+                if (currentPiece != null) {
+                    res += currentPiece.getPieceType().getStringAccordingToPieceType(currentPiece.getPlayerTeamColor().toString());
+                } else {
+                    res += "-";
+                }
+
+                /*
+                if (boardArray[i][j].getPiece() != null) {
+                    if (boardArray[i][j].getPiece().getPlayerId() == 1) {
+                        if (boardArray[i][j].getPiece().getType().equals(Piece.PION_TYPE_LICORNE)) {
                             res += "N";
                         } else {
                             res += "n";
                         }
                     } else {
-                        if (boardArray[i][j].getPion().getType().equals(Pion.PION_TYPE_LICORNE)) {
+                        if (boardArray[i][j].getPiece().getType().equals(Piece.PION_TYPE_LICORNE)) {
                             res += "B";
                         } else {
                             res += "b";
                         }
 
                     }
-
                 } else {
                     res +="-";
                 }
+                 */
             }
         }
         return res;
