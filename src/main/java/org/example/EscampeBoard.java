@@ -244,7 +244,7 @@ public class EscampeBoard implements Partie1 {
     //////////////////////////////////////////////////////////PERSONNAL FUNCTION/////////////////////////////////////////////////////
 
     public boolean isFree(Coordinate coordinate) {
-        return boardArray[coordinate.getX()][coordinate.getY()].getPiece() == null;
+        return boardArray[coordinate.getY()][coordinate.getX()].getPiece() == null;
     }
 
     public boolean isInBoard(Coordinate coordinate) {
