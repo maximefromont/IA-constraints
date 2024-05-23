@@ -5,24 +5,25 @@ public class Coordinate {
 
 
     //PRIVATE ATTRIBUTES
-    private int y;
     private int x;
+    private int y;
+
 
     //CONSTRUCTOR
-    public Coordinate(int y, int x) {
+    public Coordinate(int x, int y) {
         this.y = y;
         this.x = x;
     }
 
     public Coordinate(String coordinate) {
-        this.y = coordinate.charAt(0) - 'A';
-        this.x = Integer.parseInt(coordinate.substring(1)) - 1;
+        this.x = coordinate.charAt(0) - 'A';
+        this.y = Integer.parseInt(coordinate.substring(1)) - 1;
     }
 
     //override the toString method
 
     public String toString() {
-        return (char)('A' + y) + "" + (x + 1);
+        return (char)('A' + x) + "" + (y + 1);
     }
 
     //add equals method
@@ -36,7 +37,7 @@ public class Coordinate {
 
     //add a function to get the relative move to go from a coordinate tp an other
     public Coordinate move(Coordinate other){
-        return new Coordinate(other.x - x, other.y - y);
+        return new Coordinate(other.x - x, y - other.y);
 
     }
 
@@ -73,6 +74,21 @@ public class Coordinate {
         System.out.println("B3: "+new Coordinate("B3").toString());
 
 
+        Assert.assertEquals("A1", new Coordinate(0,0).toString());
+        Assert.assertEquals("A2", new Coordinate(0,1).toString());
+        Assert.assertEquals("A3", new Coordinate(0,2).toString());
+
+
+        Assert.assertEquals("B1", new Coordinate(1,0).toString());
+        Assert.assertEquals("B2", new Coordinate(1,1).toString());
+        Assert.assertEquals("B3", new Coordinate(1,2).toString());
+
+
+        Assert.assertEquals("C1", new Coordinate(2,0).toString());
+        Assert.assertEquals("C2", new Coordinate(2,1).toString());
+        Assert.assertEquals("C3", new Coordinate(2,2).toString());
+
+
 
 
         Assert.assertEquals("A1", new Coordinate("A1").toString());
@@ -83,6 +99,16 @@ public class Coordinate {
         Assert.assertEquals("F6", new Coordinate("F6").toString());
 
         Assert.assertEquals("A2", new Coordinate("A2").toString());
+        Assert.assertEquals("A4", new Coordinate("A4").toString());
+
+        Assert.assertEquals("B3", new Coordinate("B3").toString());
+        Assert.assertEquals("B5", new Coordinate("B5").toString());
+
+        Assert.assertEquals("C4", new Coordinate("C4").toString());
+        Assert.assertEquals("C6", new Coordinate("C6").toString());
+
+        Assert.assertEquals("D5", new Coordinate("D5").toString());
+        Assert.assertEquals("D6", new Coordinate("D6").toString());
 
     }
 

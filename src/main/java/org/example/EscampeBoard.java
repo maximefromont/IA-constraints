@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.StrictMath.abs;
+import static java.lang.StrictMath.exp;
 
 public class EscampeBoard implements Partie1 {
 
@@ -350,6 +351,99 @@ public class EscampeBoard implements Partie1 {
                         else {
                             return false;
                         }
+                    case 3:
+                        if (!this.isFree(regularMove.getEndCoordinate())) {
+                            return false;
+                        }
+                        else if(regularMove.getMove().equals(new Coordinate(0,3))){
+                            return (this.isFree(new Coordinate(regularMove.getStartCoordinate().getX(),regularMove.getStartCoordinate().getY()+1)) &&
+                                    this.isFree(new Coordinate(regularMove.getStartCoordinate().getX(),regularMove.getStartCoordinate().getY()+2)));
+                        } else if (regularMove.getMove().equals(new Coordinate(0,-3))) {
+                            return  (this.isFree(new Coordinate(regularMove.getStartCoordinate().getX(),regularMove.getStartCoordinate().getY()-1)) &&
+                                    this.isFree(new Coordinate(regularMove.getStartCoordinate().getX(),regularMove.getStartCoordinate().getY()-2)));
+                        } else if (regularMove.getMove().equals(new Coordinate(3,0))) {
+                            return (this.isFree(new Coordinate(regularMove.getStartCoordinate().getX()+1,regularMove.getStartCoordinate().getY())) &&
+                                    this.isFree(new Coordinate(regularMove.getStartCoordinate().getX()+2,regularMove.getStartCoordinate().getY())));
+                        } else if (regularMove.getMove().equals(new Coordinate(-3,0))) {
+                            return (this.isFree(new Coordinate(regularMove.getStartCoordinate().getX()-1,regularMove.getStartCoordinate().getY())) &&
+                                    this.isFree(new Coordinate(regularMove.getStartCoordinate().getX()-2,regularMove.getStartCoordinate().getY())));
+                        }else if(regularMove.getMove().equals(new Coordinate(-1,2))) {
+                            return (this.isFree(new Coordinate(regularMove.getStartCoordinate().getX() - 1, regularMove.getStartCoordinate().getY())) &&
+                                    this.isFree(new Coordinate(regularMove.getStartCoordinate().getX()-1, regularMove.getStartCoordinate().getY() + 1)))||
+                                    (this.isFree(new Coordinate(regularMove.getStartCoordinate().getX(), regularMove.getStartCoordinate().getY() + 1)) &&
+                                            this.isFree(new Coordinate(regularMove.getStartCoordinate().getX(), regularMove.getStartCoordinate().getY() + 2)));
+                        }else if(regularMove.getMove().equals(new Coordinate(1,2))) {
+                            return (this.isFree(new Coordinate(regularMove.getStartCoordinate().getX() + 1, regularMove.getStartCoordinate().getY())) &&
+                                    this.isFree(new Coordinate(regularMove.getStartCoordinate().getX()+1, regularMove.getStartCoordinate().getY() + 1)))||
+                                    (this.isFree(new Coordinate(regularMove.getStartCoordinate().getX(), regularMove.getStartCoordinate().getY() + 1)) &&
+                                            this.isFree(new Coordinate(regularMove.getStartCoordinate().getX(), regularMove.getStartCoordinate().getY() + 2)));
+                        }else if(regularMove.getMove().equals(new Coordinate(-2,1))) {
+                            return (this.isFree(new Coordinate(regularMove.getStartCoordinate().getX() - 1, regularMove.getStartCoordinate().getY())) &&
+                                    this.isFree(new Coordinate(regularMove.getStartCoordinate().getX()-2, regularMove.getStartCoordinate().getY())))||
+                                    (this.isFree(new Coordinate(regularMove.getStartCoordinate().getX(), regularMove.getStartCoordinate().getY() + 1)) &&
+                                            this.isFree(new Coordinate(regularMove.getStartCoordinate().getX()-1, regularMove.getStartCoordinate().getY() + 1)));
+                        }else if(regularMove.getMove().equals(new Coordinate(0,1))) {
+                            return (this.isFree(new Coordinate(regularMove.getStartCoordinate().getX() - 1, regularMove.getStartCoordinate().getY())) &&
+                                    this.isFree(new Coordinate(regularMove.getStartCoordinate().getX()-1, regularMove.getStartCoordinate().getY()+1)))||
+                                    (this.isFree(new Coordinate(regularMove.getStartCoordinate().getX()+1, regularMove.getStartCoordinate().getY() )) &&
+                                            this.isFree(new Coordinate(regularMove.getStartCoordinate().getX()+1, regularMove.getStartCoordinate().getY() + 1)));
+
+                        } else if (regularMove.getMove().equals(new Coordinate(2,1))) {
+                            return (this.isFree(new Coordinate(regularMove.getStartCoordinate().getX() + 1, regularMove.getStartCoordinate().getY())) &&
+                                    this.isFree(new Coordinate(regularMove.getStartCoordinate().getX()+2, regularMove.getStartCoordinate().getY())))||
+                                    (this.isFree(new Coordinate(regularMove.getStartCoordinate().getX(), regularMove.getStartCoordinate().getY() + 1)) &&
+                                            this.isFree(new Coordinate(regularMove.getStartCoordinate().getX()+1, regularMove.getStartCoordinate().getY() + 1)));
+
+                        }
+                        else if(regularMove.getMove().equals(new Coordinate(-1,0))) {
+                            return (this.isFree(new Coordinate(regularMove.getStartCoordinate().getX() , regularMove.getStartCoordinate().getY()+1)) &&
+                                    this.isFree(new Coordinate(regularMove.getStartCoordinate().getX()-1, regularMove.getStartCoordinate().getY()+1)))||
+                                    (this.isFree(new Coordinate(regularMove.getStartCoordinate().getX(), regularMove.getStartCoordinate().getY() -1)) &&
+                                            this.isFree(new Coordinate(regularMove.getStartCoordinate().getX()-1, regularMove.getStartCoordinate().getY() - 1)));
+
+                        } else if (regularMove.getMove().equals(new Coordinate(1,0))) {
+                            return (this.isFree(new Coordinate(regularMove.getStartCoordinate().getX() , regularMove.getStartCoordinate().getY()+1)) &&
+                                    this.isFree(new Coordinate(regularMove.getStartCoordinate().getX()+1, regularMove.getStartCoordinate().getY()+1)))||
+                                    (this.isFree(new Coordinate(regularMove.getStartCoordinate().getX(), regularMove.getStartCoordinate().getY() +1)) &&
+                                            this.isFree(new Coordinate(regularMove.getStartCoordinate().getX()+1, regularMove.getStartCoordinate().getY() + 1)));
+
+                        }
+                        else if(regularMove.getMove().equals(new Coordinate(-2,-1))){
+                            return (this.isFree(new Coordinate(regularMove.getStartCoordinate().getX() - 1, regularMove.getStartCoordinate().getY())) &&
+                                    this.isFree(new Coordinate(regularMove.getStartCoordinate().getX()-2, regularMove.getStartCoordinate().getY())))||
+                                    (this.isFree(new Coordinate(regularMove.getStartCoordinate().getX(), regularMove.getStartCoordinate().getY() - 1)) &&
+                                            this.isFree(new Coordinate(regularMove.getStartCoordinate().getX()-1, regularMove.getStartCoordinate().getY() - 1)));
+                        }
+                        else if(regularMove.getMove().equals(new Coordinate(0,-1))){
+                            System.out.println("test");
+                            return (this.isFree(new Coordinate(regularMove.getStartCoordinate().getX() - 1, regularMove.getStartCoordinate().getY())) &&
+                                    this.isFree(new Coordinate(regularMove.getStartCoordinate().getX()-1, regularMove.getStartCoordinate().getY()-1)))||
+                                    (this.isFree(new Coordinate(regularMove.getStartCoordinate().getX()+1, regularMove.getStartCoordinate().getY() )) &&
+                                            this.isFree(new Coordinate(regularMove.getStartCoordinate().getX()+1, regularMove.getStartCoordinate().getY() - 1)));
+                        }else if(regularMove.getMove().equals(new Coordinate(2,-1))){
+                            return (this.isFree(new Coordinate(regularMove.getStartCoordinate().getX() + 1, regularMove.getStartCoordinate().getY())) &&
+                                    this.isFree(new Coordinate(regularMove.getStartCoordinate().getX()+2, regularMove.getStartCoordinate().getY())))||
+                                    (this.isFree(new Coordinate(regularMove.getStartCoordinate().getX(), regularMove.getStartCoordinate().getY() - 1)) &&
+                                            this.isFree(new Coordinate(regularMove.getStartCoordinate().getX()+1, regularMove.getStartCoordinate().getY() - 1)));
+                        }
+                        else if(regularMove.getMove().equals(new Coordinate(-1,-2))){
+                            return (this.isFree(new Coordinate(regularMove.getStartCoordinate().getX() - 1, regularMove.getStartCoordinate().getY())) &&
+                                    this.isFree(new Coordinate(regularMove.getStartCoordinate().getX()-1, regularMove.getStartCoordinate().getY()-1)))||
+                                    (this.isFree(new Coordinate(regularMove.getStartCoordinate().getX(), regularMove.getStartCoordinate().getY() - 1)) &&
+                                            this.isFree(new Coordinate(regularMove.getStartCoordinate().getX(), regularMove.getStartCoordinate().getY() - 2)));
+                        }
+                        else if(regularMove.getMove().equals(new Coordinate(1,-2))){
+                            return (this.isFree(new Coordinate(regularMove.getStartCoordinate().getX() + 1, regularMove.getStartCoordinate().getY())) &&
+                                    this.isFree(new Coordinate(regularMove.getStartCoordinate().getX()+1, regularMove.getStartCoordinate().getY()-1)))||
+                                    (this.isFree(new Coordinate(regularMove.getStartCoordinate().getX(), regularMove.getStartCoordinate().getY() - 1)) &&
+                                            this.isFree(new Coordinate(regularMove.getStartCoordinate().getX(), regularMove.getStartCoordinate().getY() - 2)));
+                        }
+                        else {
+                            return false;
+                        }
+
+
+
                     default:
 
                         //can the value of the case at the start of the move
@@ -394,13 +488,105 @@ public class EscampeBoard implements Partie1 {
                                     return false;
                                 }
 
+                            case 3:
+                                if (!this.isFree(regularMove.getEndCoordinate())) {
+                                    return false;
+                                }
+                                else if(regularMove.getMove().equals(new Coordinate(0,3))){
+                                    return (this.isFree(new Coordinate(regularMove.getStartCoordinate().getX(),regularMove.getStartCoordinate().getY()+1)) &&
+                                            this.isFree(new Coordinate(regularMove.getStartCoordinate().getX(),regularMove.getStartCoordinate().getY()+2)));
+                                } else if (regularMove.getMove().equals(new Coordinate(0,-3))) {
+                                    return  (this.isFree(new Coordinate(regularMove.getStartCoordinate().getX(),regularMove.getStartCoordinate().getY()-1)) &&
+                                            this.isFree(new Coordinate(regularMove.getStartCoordinate().getX(),regularMove.getStartCoordinate().getY()-2)));
+                                } else if (regularMove.getMove().equals(new Coordinate(3,0))) {
+                                    return (this.isFree(new Coordinate(regularMove.getStartCoordinate().getX()+1,regularMove.getStartCoordinate().getY())) &&
+                                            this.isFree(new Coordinate(regularMove.getStartCoordinate().getX()+2,regularMove.getStartCoordinate().getY())));
+                                } else if (regularMove.getMove().equals(new Coordinate(-3,0))) {
+                                    return (this.isFree(new Coordinate(regularMove.getStartCoordinate().getX()-1,regularMove.getStartCoordinate().getY())) &&
+                                            this.isFree(new Coordinate(regularMove.getStartCoordinate().getX()-2,regularMove.getStartCoordinate().getY())));
+                                }else if(regularMove.getMove().equals(new Coordinate(-1,2))) {
+                                    return (this.isFree(new Coordinate(regularMove.getStartCoordinate().getX() - 1, regularMove.getStartCoordinate().getY())) &&
+                                            this.isFree(new Coordinate(regularMove.getStartCoordinate().getX()-1, regularMove.getStartCoordinate().getY() + 1)))||
+                                            (this.isFree(new Coordinate(regularMove.getStartCoordinate().getX(), regularMove.getStartCoordinate().getY() + 1)) &&
+                                                    this.isFree(new Coordinate(regularMove.getStartCoordinate().getX(), regularMove.getStartCoordinate().getY() + 2)));
+                                }else if(regularMove.getMove().equals(new Coordinate(1,2))) {
+                                    return (this.isFree(new Coordinate(regularMove.getStartCoordinate().getX() + 1, regularMove.getStartCoordinate().getY())) &&
+                                            this.isFree(new Coordinate(regularMove.getStartCoordinate().getX()+1, regularMove.getStartCoordinate().getY() + 1)))||
+                                            (this.isFree(new Coordinate(regularMove.getStartCoordinate().getX(), regularMove.getStartCoordinate().getY() + 1)) &&
+                                                    this.isFree(new Coordinate(regularMove.getStartCoordinate().getX(), regularMove.getStartCoordinate().getY() + 2)));
+                                }else if(regularMove.getMove().equals(new Coordinate(-2,1))) {
+                                    return (this.isFree(new Coordinate(regularMove.getStartCoordinate().getX() - 1, regularMove.getStartCoordinate().getY())) &&
+                                            this.isFree(new Coordinate(regularMove.getStartCoordinate().getX()-2, regularMove.getStartCoordinate().getY())))||
+                                            (this.isFree(new Coordinate(regularMove.getStartCoordinate().getX(), regularMove.getStartCoordinate().getY() + 1)) &&
+                                                    this.isFree(new Coordinate(regularMove.getStartCoordinate().getX()-1, regularMove.getStartCoordinate().getY() + 1)));
+                                }else if(regularMove.getMove().equals(new Coordinate(0,1))) {
+                                    return (this.isFree(new Coordinate(regularMove.getStartCoordinate().getX() - 1, regularMove.getStartCoordinate().getY())) &&
+                                            this.isFree(new Coordinate(regularMove.getStartCoordinate().getX()-1, regularMove.getStartCoordinate().getY()+1)))||
+                                            (this.isFree(new Coordinate(regularMove.getStartCoordinate().getX()+1, regularMove.getStartCoordinate().getY() )) &&
+                                                    this.isFree(new Coordinate(regularMove.getStartCoordinate().getX()+1, regularMove.getStartCoordinate().getY() + 1)));
+
+                                } else if (regularMove.getMove().equals(new Coordinate(2,1))) {
+                                    return (this.isFree(new Coordinate(regularMove.getStartCoordinate().getX() + 1, regularMove.getStartCoordinate().getY())) &&
+                                            this.isFree(new Coordinate(regularMove.getStartCoordinate().getX()+2, regularMove.getStartCoordinate().getY())))||
+                                            (this.isFree(new Coordinate(regularMove.getStartCoordinate().getX(), regularMove.getStartCoordinate().getY() + 1)) &&
+                                                    this.isFree(new Coordinate(regularMove.getStartCoordinate().getX()+1, regularMove.getStartCoordinate().getY() + 1)));
+
+                                }
+                                else if(regularMove.getMove().equals(new Coordinate(-1,0))) {
+                                    return (this.isFree(new Coordinate(regularMove.getStartCoordinate().getX() , regularMove.getStartCoordinate().getY()+1)) &&
+                                            this.isFree(new Coordinate(regularMove.getStartCoordinate().getX()-1, regularMove.getStartCoordinate().getY()+1)))||
+                                            (this.isFree(new Coordinate(regularMove.getStartCoordinate().getX(), regularMove.getStartCoordinate().getY() -1)) &&
+                                                    this.isFree(new Coordinate(regularMove.getStartCoordinate().getX()-1, regularMove.getStartCoordinate().getY() - 1)));
+
+                                } else if (regularMove.getMove().equals(new Coordinate(1,0))) {
+                                    return (this.isFree(new Coordinate(regularMove.getStartCoordinate().getX() , regularMove.getStartCoordinate().getY()+1)) &&
+                                            this.isFree(new Coordinate(regularMove.getStartCoordinate().getX()+1, regularMove.getStartCoordinate().getY()+1)))||
+                                            (this.isFree(new Coordinate(regularMove.getStartCoordinate().getX(), regularMove.getStartCoordinate().getY() +1)) &&
+                                                    this.isFree(new Coordinate(regularMove.getStartCoordinate().getX()+1, regularMove.getStartCoordinate().getY() + 1)));
+
+                                }
+                                else if(regularMove.getMove().equals(new Coordinate(-2,-1))){
+                                    return (this.isFree(new Coordinate(regularMove.getStartCoordinate().getX() - 1, regularMove.getStartCoordinate().getY())) &&
+                                            this.isFree(new Coordinate(regularMove.getStartCoordinate().getX()-2, regularMove.getStartCoordinate().getY())))||
+                                            (this.isFree(new Coordinate(regularMove.getStartCoordinate().getX(), regularMove.getStartCoordinate().getY() - 1)) &&
+                                                    this.isFree(new Coordinate(regularMove.getStartCoordinate().getX()-1, regularMove.getStartCoordinate().getY() - 1)));
+                                }
+                                else if(regularMove.getMove().equals(new Coordinate(0,-1))){
+                                    System.out.println("test");
+                                    return (this.isFree(new Coordinate(regularMove.getStartCoordinate().getX() - 1, regularMove.getStartCoordinate().getY())) &&
+                                            this.isFree(new Coordinate(regularMove.getStartCoordinate().getX()-1, regularMove.getStartCoordinate().getY()-1)))||
+                                            (this.isFree(new Coordinate(regularMove.getStartCoordinate().getX()+1, regularMove.getStartCoordinate().getY() )) &&
+                                                    this.isFree(new Coordinate(regularMove.getStartCoordinate().getX()+1, regularMove.getStartCoordinate().getY() - 1)));
+                                }else if(regularMove.getMove().equals(new Coordinate(2,-1))){
+                                    return (this.isFree(new Coordinate(regularMove.getStartCoordinate().getX() + 1, regularMove.getStartCoordinate().getY())) &&
+                                            this.isFree(new Coordinate(regularMove.getStartCoordinate().getX()+2, regularMove.getStartCoordinate().getY())))||
+                                            (this.isFree(new Coordinate(regularMove.getStartCoordinate().getX(), regularMove.getStartCoordinate().getY() - 1)) &&
+                                                    this.isFree(new Coordinate(regularMove.getStartCoordinate().getX()+1, regularMove.getStartCoordinate().getY() - 1)));
+                                }
+                                else if(regularMove.getMove().equals(new Coordinate(-1,-2))){
+
+                                    return (this.isFree(new Coordinate(regularMove.getStartCoordinate().getX() - 1, regularMove.getStartCoordinate().getY())) &&
+                                            this.isFree(new Coordinate(regularMove.getStartCoordinate().getX()-1, regularMove.getStartCoordinate().getY()-1)))||
+                                            (this.isFree(new Coordinate(regularMove.getStartCoordinate().getX(), regularMove.getStartCoordinate().getY() - 1)) &&
+                                                    this.isFree(new Coordinate(regularMove.getStartCoordinate().getX(), regularMove.getStartCoordinate().getY() - 2)));
+                                }
+                                else if(regularMove.getMove().equals(new Coordinate(1,-2))){
+                                    return (this.isFree(new Coordinate(regularMove.getStartCoordinate().getX() + 1, regularMove.getStartCoordinate().getY())) &&
+                                            this.isFree(new Coordinate(regularMove.getStartCoordinate().getX()+1, regularMove.getStartCoordinate().getY()-1)))||
+                                            (this.isFree(new Coordinate(regularMove.getStartCoordinate().getX(), regularMove.getStartCoordinate().getY() - 1)) &&
+                                                    this.isFree(new Coordinate(regularMove.getStartCoordinate().getX(), regularMove.getStartCoordinate().getY() - 2)));
+                                }
+                                else {
+                                    return false;
+                                }
+
+
 
                         }
 
 
                 }
-            case 3:
-                break;
+
             default:
 
                 return false;
@@ -454,9 +640,28 @@ public class EscampeBoard implements Partie1 {
                         }
                     }
                     return potentionalMoves;
+                case 3:
+                    potentionalMoves = new RegularMove[26];
+                    index = 0;
+                    for (int i = -3; i <= 3; i++) {
+                        for (int j = -3; j <= 3; j++) {
+                            if (abs(i) + abs(j) == 3 || abs(i) + abs(j) == 1){
+                                if (isInBoard(new Coordinate(position.getX() + i, position.getY() + j))) {
+                                    //test if the move is valid
+                                    potentionalMoves[index] = new RegularMove(new Coordinate(position.getX(), position.getY()), new Coordinate(position.getX() + i, position.getY() + j), playerId);
+                                    index++;
+//                                    if (isValidMove(new RegularMove(position, new Coordinate(position.getX() + i, position.getY() + j), playerId), player)) {
+//                                        potentionalMoves[index] = new RegularMove(new Coordinate(position.getX(), position.getY()), new Coordinate(position.getX() + i, position.getY() + j), playerId);
+//                                        index++;
+//                                    }
+                                }
+                            }
+                        }
+                    }
+                    return potentionalMoves;
 
             default:
-                    return null;
+                    return new RegularMove[0];
 
 
 
@@ -501,11 +706,83 @@ public class EscampeBoard implements Partie1 {
                     }
 
                 } else {
-                    System.out.print(boardArray[i][j].getValue() + " ");
+                    System.out.print("- ");
                 }
             }
             System.out.println();
         }
+    }
+
+    public void printPossibleMoves(RegularMove[] moves) {
+        //get the nyumber of non null moves
+        int count = 0;
+        for (RegularMove move : moves) {
+            if (move != null) {
+                count++;
+            }
+        }
+
+        System.out.println("nombre de mouvements possibles : " + count);
+        System.out.println("    A B C D E F");
+        System.out.println("----------------");
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            System.out.print("0" + (i + 1) + " |");
+
+            for (int j = 0; j < BOARD_SIZE; j++) {
+
+
+                boolean isPossible = false;
+                for (RegularMove move : moves) {
+                    if (move != null) {
+                        if (move.getEndCoordinate().equals(new Coordinate(j, i))){
+
+
+                            isPossible = true;
+                            break;
+                        }
+                    }
+                }
+
+
+
+
+
+                if (boardArray[i][j].getPion() != null) {
+
+                    if(isPossible) {
+                        //test if the pion is a licorne
+                        if (boardArray[i][j].getPion().getType().equals(Pion.PION_TYPE_LICORNE)) {
+                            System.out.print("X ");
+                        } else {
+                            System.out.print("E ");
+                        }
+                    }
+                    else if (boardArray[i][j].getPion().getPlayerId() == 1) {
+                        if (boardArray[i][j].getPion().getType().equals(Pion.PION_TYPE_LICORNE)) {
+                            System.out.print("N ");
+                        } else {
+                            System.out.print("n ");
+                        }
+                    } else {
+                        if (boardArray[i][j].getPion().getType().equals(Pion.PION_TYPE_LICORNE)) {
+                            System.out.print("B ");
+                        } else {
+                            System.out.print("b ");
+                        }
+                    }
+
+                } else {
+                    if(isPossible) {
+                        System.out.print("O ");
+                    }else {
+                        System.out.print("- ");
+                    }
+
+                }
+            }
+            System.out.println();
+        }
+
     }
 
     public String boardToString() {
@@ -554,11 +831,14 @@ public class EscampeBoard implements Partie1 {
 
 //
         RegularMove[] moves = escampeBoard.possibleMovesPaw("blanc",new Coordinate("B5"));
+        escampeBoard.printPossibleMoves(moves);
+System.out.println("possible moves :");
+
 
         //print all the possible moves if their not null
         for(RegularMove move : moves){
             if(move != null){
-                System.out.println(move.toString());
+                System.out.println(move.toString()+" move : x="+move.getMove().getX()+" y="+move.getMove().getY());
             }
         }
 
