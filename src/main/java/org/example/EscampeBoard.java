@@ -253,13 +253,24 @@ public class EscampeBoard implements Partie1 {
 
 
     public boolean isValidMoveFromLisere(RegularMove regularMove,int lisereValue){
+        boolean adverseLicorne = false;
+        //retouner si il se trouve une licorne de couleur adverse sur la case d'arrivée
+        if (this.boardArray[regularMove.getEndCoordinate().getY()][regularMove.getEndCoordinate().getX()].getPiece() != null) {
+            if (this.boardArray[regularMove.getEndCoordinate().getY()][regularMove.getEndCoordinate().getX()].getPiece().getPieceType() == PIECE_TYPE.LICORNE) {
+                if (this.boardArray[regularMove.getEndCoordinate().getY()][regularMove.getEndCoordinate().getX()].getPiece().getPlayerTeamColor() != regularMove.getTeamColor()) {
+                    adverseLicorne = true;
+                }
+            }
+        }
         switch (lisereValue){
             case 1:
-                return this.isFree(regularMove.getEndCoordinate()
-                );
+                //test if the final case is free or if there is an adverse licorne
+                return this.isFree(regularMove.getEndCoordinate()) &&! adverseLicorne;
+
+
             case 2:
                 //test if the final case is free
-                if(!this.isFree(regularMove.getEndCoordinate())){
+                if(!this.isFree(regularMove.getEndCoordinate())&&!adverseLicorne){
                     return false;
                 }
                 //test if the intermediate case is free
@@ -292,17 +303,18 @@ public class EscampeBoard implements Partie1 {
                     return false;
                 }
             case 3:
-                if (!this.isFree(regularMove.getEndCoordinate())) {
+                if (!this.isFree(regularMove.getEndCoordinate())&&!adverseLicorne) {
                     return false;
                 }
                 else if(regularMove.getMove().equals(new Coordinate(0,3))){
+                    System.out.println("test B2");
                     return (this.isFree(new Coordinate(regularMove.getStartCoordinate().getX(),regularMove.getStartCoordinate().getY()+1)) &&
                             this.isFree(new Coordinate(regularMove.getStartCoordinate().getX(),regularMove.getStartCoordinate().getY()+2)));
                 } else if (regularMove.getMove().equals(new Coordinate(0,-3))) {
                     return  (this.isFree(new Coordinate(regularMove.getStartCoordinate().getX(),regularMove.getStartCoordinate().getY()-1)) &&
                             this.isFree(new Coordinate(regularMove.getStartCoordinate().getX(),regularMove.getStartCoordinate().getY()-2)));
                 } else if (regularMove.getMove().equals(new Coordinate(3,0))) {
-                    System.out.println("test E5");
+
                     return (this.isFree(new Coordinate(regularMove.getStartCoordinate().getX()+1,regularMove.getStartCoordinate().getY())) &&
                             this.isFree(new Coordinate(regularMove.getStartCoordinate().getX()+2,regularMove.getStartCoordinate().getY())));
                 } else if (regularMove.getMove().equals(new Coordinate(-3,0))) {
@@ -324,7 +336,7 @@ public class EscampeBoard implements Partie1 {
                             (this.isFree(new Coordinate(regularMove.getStartCoordinate().getX(), regularMove.getStartCoordinate().getY() + 1)) &&
                                     this.isFree(new Coordinate(regularMove.getStartCoordinate().getX()-1, regularMove.getStartCoordinate().getY() + 1)));
                 }else if(regularMove.getMove().equals(new Coordinate(0,1))) {
-                    System.out.println("test");
+
                     return (this.isFree(new Coordinate(regularMove.getStartCoordinate().getX() - 1, regularMove.getStartCoordinate().getY())) &&
                             this.isFree(new Coordinate(regularMove.getStartCoordinate().getX()-1, regularMove.getStartCoordinate().getY()+1)))||
                             (this.isFree(new Coordinate(regularMove.getStartCoordinate().getX()+1, regularMove.getStartCoordinate().getY() )) &&
@@ -357,7 +369,7 @@ public class EscampeBoard implements Partie1 {
                                     this.isFree(new Coordinate(regularMove.getStartCoordinate().getX()-1, regularMove.getStartCoordinate().getY() - 1)));
                 }
                 else if(regularMove.getMove().equals(new Coordinate(0,-1))){
-                    System.out.println("test");
+
                     return (this.isFree(new Coordinate(regularMove.getStartCoordinate().getX() - 1, regularMove.getStartCoordinate().getY())) &&
                             this.isFree(new Coordinate(regularMove.getStartCoordinate().getX()-1, regularMove.getStartCoordinate().getY()-1)))||
                             (this.isFree(new Coordinate(regularMove.getStartCoordinate().getX()+1, regularMove.getStartCoordinate().getY() )) &&
