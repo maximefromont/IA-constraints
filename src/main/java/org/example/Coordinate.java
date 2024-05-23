@@ -37,7 +37,7 @@ public class Coordinate {
 
     //add a function to get the relative move to go from a coordinate tp an other
     public Coordinate move(Coordinate other){
-        return new Coordinate(other.x - x, y - other.y);
+        return new Coordinate(other.x - x, other.y - y);
 
     }
 
