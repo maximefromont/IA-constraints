@@ -399,6 +399,8 @@ public class EscampeBoard implements Partie1 {
 
 
                 }
+            case 3:
+                break;
             default:
 
                 return false;
@@ -551,7 +553,14 @@ public class EscampeBoard implements Partie1 {
        escampeBoard.printBoardWithPion();
 
 //
-        RegularMove[] moves = escampeBoard.possibleMovesPaw("blanc",new Coordinate(0,3));
+        RegularMove[] moves = escampeBoard.possibleMovesPaw("blanc",new Coordinate("B5"));
+
+        //print all the possible moves if their not null
+        for(RegularMove move : moves){
+            if(move != null){
+                System.out.println(move.toString());
+            }
+        }
 
     }
 }

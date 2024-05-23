@@ -18,7 +18,7 @@ public class PositionMove implements Move{
         String[] coordinates = move.split("/");
         Coordinate[] coordinatesArray = new Coordinate[6];
         for (int i = 0; i < 6; i++) {
-            coordinatesArray[i] = Coordinate.fromString(coordinates[i]);
+            coordinatesArray[i] = new Coordinate(coordinates[i]);
         }
         return new PositionMove(coordinatesArray, playerId);
 

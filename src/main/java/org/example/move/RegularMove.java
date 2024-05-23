@@ -26,8 +26,8 @@ public class RegularMove implements  Move{
     public static RegularMove fromString(String move, int playerId) {
         //split the move string into two coordinates the string are in the format B1-B2
         String[] coordinates = move.split("-");
-        Coordinate startCoordinate = Coordinate.fromString(coordinates[0]);
-        Coordinate endCoordinate = Coordinate.fromString(coordinates[1]);
+        Coordinate startCoordinate = new Coordinate(coordinates[0]);
+        Coordinate endCoordinate = new Coordinate(coordinates[1]);
         return new RegularMove(startCoordinate, endCoordinate, playerId);
     }
 

@@ -1,23 +1,22 @@
 package org.example;
-
+import org.junit.Assert;
+// TODO add restriction to the coordinate
 public class Coordinate {
 
 
     //PRIVATE ATTRIBUTES
-    private int x;
     private int y;
-
-    //create a constructor from a string with the format A1
-    public static Coordinate fromString(String coordinate) {
-        int x = coordinate.charAt(0) - 'A';
-        int y = Integer.parseInt(coordinate.substring(1)) - 1;
-        return new Coordinate(x, y);
-    }
+    private int x;
 
     //CONSTRUCTOR
-    public Coordinate(int x, int y) {
-        this.x = x;
+    public Coordinate(int y, int x) {
         this.y = y;
+        this.x = x;
+    }
+
+    public Coordinate(String coordinate) {
+        this.y = coordinate.charAt(0) - 'A';
+        this.x = Integer.parseInt(coordinate.substring(1)) - 1;
     }
 
     //override the toString method
@@ -42,9 +41,6 @@ public class Coordinate {
     }
 
 
-
-
-
     //PUBLIC INTERFACE
     public int getX() {
         return x;
@@ -52,6 +48,42 @@ public class Coordinate {
 
     public int getY() {
         return y;
+    }
+
+
+    //add main method
+    public static void main(String[] args) {
+        Coordinate coordinate = new Coordinate(0, 0);
+        System.out.println(coordinate.toString());
+        System.out.println(coordinate.move(new Coordinate(1, 1)).toString());
+        System.out.println(coordinate.move(new Coordinate(1, 0)).toString());
+        System.out.println(coordinate.move(new Coordinate(0, 1)).toString());
+        System.out.println(coordinate.move(new Coordinate(-1, -1)).toString());
+        System.out.println(coordinate.move(new Coordinate(-1, 0)).toString());
+        System.out.println(coordinate.move(new Coordinate(0, -1)).toString());
+
+        System.out.println("A1: "+new Coordinate("A1").toString());
+        System.out.println("B2: "+new Coordinate("B2").toString());
+        System.out.println("C3: "+new Coordinate("C3").toString());
+        System.out.println("D4: "+new Coordinate("D4").toString());
+        System.out.println("E5: "+new Coordinate("E5").toString());
+        System.out.println("F6: "+new Coordinate("F6").toString());
+
+        System.out.println("A2: "+new Coordinate("A2").toString());
+        System.out.println("B3: "+new Coordinate("B3").toString());
+
+
+
+
+        Assert.assertEquals("A1", new Coordinate("A1").toString());
+        Assert.assertEquals("B2", new Coordinate("B2").toString());
+        Assert.assertEquals("C3", new Coordinate("C3").toString());
+        Assert.assertEquals("D4", new Coordinate("D4").toString());
+        Assert.assertEquals("E5", new Coordinate("E5").toString());
+        Assert.assertEquals("F6", new Coordinate("F6").toString());
+
+        Assert.assertEquals("A2", new Coordinate("A2").toString());
+
     }
 
 }
