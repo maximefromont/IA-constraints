@@ -824,7 +824,7 @@ public class EscampeBoard implements Partie1 {
         escampeBoard.printBoard();
         System.out.println();
         escampeBoard.printBoardWithPion();
-       escampeBoard.setFromFile("/home/kevin/Cour/résolution de contrainte/projet/demo1_board.txt");
+       escampeBoard.setFromFile("src/demo1_board.txt");
         System.out.println();
        System.out.println("board after load file :");
        escampeBoard.printBoardWithPion();
