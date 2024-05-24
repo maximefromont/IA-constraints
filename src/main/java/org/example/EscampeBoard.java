@@ -27,48 +27,14 @@ public class EscampeBoard implements Partie1 {
         boardArray = new Case[BOARD_SIZE][BOARD_SIZE];
 
         //Initializing the board with straight values from the subject
-        //1st line
-        boardArray[0][0] = new Case(1);
-        boardArray[0][1] = new Case(2);
-        boardArray[0][2] = new Case(2);
-        boardArray[0][3] = new Case(3);
-        boardArray[0][4] = new Case(1);
-        boardArray[0][5] = new Case(2);
-        //2nd line
-        boardArray[1][0] = new Case(3);
-        boardArray[1][1] = new Case(1);
-        boardArray[1][2] = new Case(3);
-        boardArray[1][3] = new Case(1);
-        boardArray[1][4] = new Case(3);
-        boardArray[1][5] = new Case(2);
-        //3rd line
-        boardArray[2][0] = new Case(2);
-        boardArray[2][1] = new Case(3);
-        boardArray[2][2] = new Case(1);
-        boardArray[2][3] = new Case(2);
-        boardArray[2][4] = new Case(1);
-        boardArray[2][5] = new Case(3);
-        //4th line
-        boardArray[3][0] = new Case(2);
-        boardArray[3][1] = new Case(1);
-        boardArray[3][2] = new Case(3);
-        boardArray[3][3] = new Case(2);
-        boardArray[3][4] = new Case(3);
-        boardArray[3][5] = new Case(1);
-        //5th line
-        boardArray[4][0] = new Case(1);
-        boardArray[4][1] = new Case(3);
-        boardArray[4][2] = new Case(1);
-        boardArray[4][3] = new Case(3);
-        boardArray[4][4] = new Case(1);
-        boardArray[4][5] = new Case(2);
-        //6th line
-        boardArray[5][0] = new Case(3);
-        boardArray[5][1] = new Case(2);
-        boardArray[5][2] = new Case(2);
-        boardArray[5][3] = new Case(1);
-        boardArray[5][4] = new Case(3);
-        boardArray[5][5] = new Case(2);
+        boardArray = new Case[][]{
+                {new Case(1), new Case(2), new Case(2), new Case(3), new Case(1), new Case(2)},
+                {new Case(3), new Case(1), new Case(3), new Case(1), new Case(3), new Case(2)},
+                {new Case(2), new Case(3), new Case(1), new Case(2), new Case(1), new Case(3)},
+                {new Case(2), new Case(1), new Case(3), new Case(2), new Case(3), new Case(1)},
+                {new Case(1), new Case(3), new Case(1), new Case(3), new Case(1), new Case(2)},
+                {new Case(3), new Case(2), new Case(2), new Case(1), new Case(3), new Case(2)}
+        };
     }
 
     @Override
