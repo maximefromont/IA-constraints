@@ -5,6 +5,7 @@ import org.example.move.Move;
 import org.example.move.PositionMove;
 import org.example.move.RegularMove;
 
+import javax.swing.text.Position;
 import java.io.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -349,9 +350,10 @@ public class EscampeBoard implements Partie1 {
     }
 
     public boolean isValidMove(Move move, String player) {
-        //make a switch case to test the type of the move
-        switch (move.getClass().getName()) {
-            case "org.example.move.PositionMove":
+
+        switch (move) {
+
+            case PositionMove positionMove:
 
                 for (int i = 0; i < 6; i++) {
                     for (int j = i + 1; j < 6; j++) {
@@ -400,14 +402,10 @@ public class EscampeBoard implements Partie1 {
                     } else {
                         return false;
                     }
-
-
                 }
+                break;
 
-            case "org.example.move.RegularMove":
-                //convert the move to a regular move
-                assert move instanceof RegularMove;
-                RegularMove regularMove = (RegularMove) move;
+            case RegularMove regularMove:
 
                 //teest if last lisiere is defined
                 if (lastLisere == -1) {
@@ -416,8 +414,10 @@ public class EscampeBoard implements Partie1 {
                 }else {
                     return isValidMoveFromLisere(regularMove, lastLisere);
                 }
+                break;
+
             default:
-                throw new IllegalStateException("Unexpected value: " + move.getClass().getName());
+                throw new IllegalStateException(Printinator.getUnexpectedValueErrorMessage(move.getClass().getName()));
         }
        
 

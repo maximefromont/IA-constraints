@@ -24,6 +24,11 @@ public class Printinator {
         }
     }
 
+    //Unpected value message processing method
+    public static String getUnexpectedValueErrorMessage(String value) {
+        return UNEXPECTED_VALUE_ERROR_MESSAGE + " : " + value;
+    }
+
     //File managment methods
     public static void printFileCreationMessage(String filePath, boolean success) {
         if (success) {
@@ -52,5 +57,8 @@ public class Printinator {
     //File managment messages
     private static final String FILE_CREATION_SUCCESS_MESSAGE = "File created successfully";
     private static final String FILE_CREATION_FAILURE_MESSAGE = "File already exists";
+
+    //Unpected value error message
+    private static final String UNEXPECTED_VALUE_ERROR_MESSAGE = "Unexpected value";
 
 }
