@@ -75,17 +75,19 @@ public class EscampeBoard implements Partie1 {
 
     @Override
     public void saveToFile(String fileName) {
+        //CONSTANTS FOR THE METHOD
+        final String FILE_FIRST_LINE = "% ABCDEF\n";
+
         File file = new File(fileName);
 
         if (!file.exists()) {
             try {
                 if (file.createNewFile()) {
-                    System.out.println("File created: " + file.getName());
+                    Printinator.printFileCreationMessage(fileName, true);
                 } else {
-                    System.out.println("File already exists.");
+                    Printinator.printFileCreationMessage(fileName, false);
                 }
             } catch (IOException e) {
-                System.out.println("An error occurred.");
                 e.printStackTrace();
             }
         }
@@ -95,33 +97,28 @@ public class EscampeBoard implements Partie1 {
 
             //create the file if it does not exist
 
-
-            //write to the first line of the file "% ABCDEF"
-            writer.write("% ABCDEF\n");
+            writer.write(FILE_FIRST_LINE);
             String boardString= boardToString();
 
             for (int i = 0; i < 6; i++) {
                 writer.write("0"+(i+1)+" "+boardString.substring(i*6,i*6+6)+" 0"+(i+1)+"\n");
             }
-            writer.write("% ABCDEF\n");
-
-
+            writer.write(FILE_FIRST_LINE);
 
             writer.close();
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
-
     }
 
     @Override
     public boolean isValidMove(String move, String player) {
         PositionMove positionMove;
         Coordinate[] coordinateMoves;
+
         switch (playedCoups()){
+
             case 0:
                 positionMove = new PositionMove(move, TEAM_COLOR.WHITE_TEAM);
                 coordinateMoves = positionMove.getCoordinates();
@@ -138,8 +135,8 @@ public class EscampeBoard implements Partie1 {
                     }
                 }
                 return  true;
-            case 1:
 
+            case 1:
                 if (this.move.getFirst() instanceof PositionMove) {
                     Coordinate firstMoveCoordinate = ((PositionMove) this.move.getFirst()).getCoordinates()[0];
                     positionMove = new PositionMove(move, TEAM_COLOR.WHITE_TEAM);
@@ -161,29 +158,13 @@ public class EscampeBoard implements Partie1 {
                             }
                         }
                     }
-
-
-
-
                 }
-
-
-
-
-
                 return true;
-
-
-
 
             default:
                 //test if the la
                 return  false;
-
-
         }
-
-
     }
 
     @Override
@@ -218,6 +199,7 @@ public class EscampeBoard implements Partie1 {
 
     public boolean isValidMoveFromLisere(RegularMove regularMove,int lisereValue){
         boolean adverseLicorne = false;
+
         //retouner si il se trouve une licorne de couleur adverse sur la case d'arrivée
         if (this.boardArray[regularMove.getEndCoordinate().getY()][regularMove.getEndCoordinate().getX()].getPiece() != null) {
             if (this.boardArray[regularMove.getEndCoordinate().getY()][regularMove.getEndCoordinate().getX()].getPiece().getPieceType() == PIECE_TYPE.LICORNE) {
@@ -226,11 +208,12 @@ public class EscampeBoard implements Partie1 {
                 }
             }
         }
+
         switch (lisereValue){
+
             case 1:
                 //test if the final case is free or if there is an adverse licorne
                 return this.isFree(regularMove.getEndCoordinate()) &&! adverseLicorne;
-
 
             case 2:
                 //test if the final case is free
@@ -266,6 +249,7 @@ public class EscampeBoard implements Partie1 {
                 else {
                     return false;
                 }
+
             case 3:
                 if (!this.isFree(regularMove.getEndCoordinate())&&!adverseLicorne) {
                     return false;
@@ -360,8 +344,8 @@ public class EscampeBoard implements Partie1 {
                 else {
                     return false;
                 }
-    }
-    return false;
+        }
+        return false;
     }
 
     public boolean isValidMove(Move move, String player) {
