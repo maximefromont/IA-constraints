@@ -53,16 +53,16 @@ public class EscampeBoard implements Partie1 {
                 for (int col = 3; col < line.length() - 3; col++) {
                     char c = line.charAt(col);
                     switch (c) {
-                        case 'N':
+                        case Printinator.LICORNE_FROM_BLACK_TEAM_IDENTIFIER:
                             boardArray[row-1][col-3].setPiece(new Piece(PIECE_TYPE.LICORNE, TEAM_COLOR.BLACK_TEAM));
                             break;
-                        case 'n':
+                        case Printinator.PALADIN_FROM_BLACK_TEAM_IDENTIFIER:
                             boardArray[row-1][col-3].setPiece(new Piece(PIECE_TYPE.PALADIN, TEAM_COLOR.BLACK_TEAM));
                             break;
-                        case 'B':
+                        case Printinator.LICORNE_FROM_WHITE_TEAM_IDENTIFIER:
                             boardArray[row-1][col-3].setPiece(new Piece(PIECE_TYPE.LICORNE, TEAM_COLOR.WHITE_TEAM));
                             break;
-                        case 'b':
+                        case Printinator.PALADIN_FROM_WHITE_TEAM_IDENTIFIER:
                             boardArray[row-1][col-3].setPiece(new Piece(PIECE_TYPE.PALADIN, TEAM_COLOR.WHITE_TEAM));
                             break;
                     }

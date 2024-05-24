@@ -6,7 +6,7 @@ import org.example.enums.TEAM_COLOR;
 public class Printinator {
 
     //PUBLIC STATIC METHODS
-    public static String getPieceCharacter(PIECE_TYPE pieceType, TEAM_COLOR teamColor) {
+    public static char getPieceCharacter(PIECE_TYPE pieceType, TEAM_COLOR teamColor) {
         if (pieceType == PIECE_TYPE.LICORNE) {
             if (teamColor == TEAM_COLOR.BLACK_TEAM) {
                 return LICORNE_FROM_BLACK_TEAM_IDENTIFIER;
@@ -24,9 +24,9 @@ public class Printinator {
 
     //PUBLIC STATIC CONSTANTS
     //Be careful, n for "Noir" in french and b for "Blanc" in french (not "Black" and "White")
-    public static final String LICORNE_FROM_BLACK_TEAM_IDENTIFIER = "N";
-    public static final String PALADIN_FROM_BLACK_TEAM_IDENTIFIER = "n";
-    public static final String LICORNE_FROM_WHITE_TEAM_IDENTIFIER = "B";
-    public static final String PALADIN_FROM_WHITE_TEAM_IDENTIFIER = "b";
+    public static final char LICORNE_FROM_BLACK_TEAM_IDENTIFIER = 'N';
+    public static final char PALADIN_FROM_BLACK_TEAM_IDENTIFIER = 'n';
+    public static final char LICORNE_FROM_WHITE_TEAM_IDENTIFIER = 'B';
+    public static final char PALADIN_FROM_WHITE_TEAM_IDENTIFIER = 'b';
 
 }
