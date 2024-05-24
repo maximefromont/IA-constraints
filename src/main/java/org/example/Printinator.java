@@ -85,7 +85,7 @@ public class Printinator {
             }
         }
 
-        System.out.println("nombre de mouvements possibles : " + count);
+        System.out.println("Nombre de mouvements possibles : " + count);
         System.out.println("    A B C D E F");
         System.out.println("----------------");
         for (int i = 0; i < boardArray.length; i++) {
