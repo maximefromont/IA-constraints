@@ -88,7 +88,6 @@ public class EscampeBoard implements Partie1 {
                     char c = line.charAt(col);
                     switch (c) {
                         case 'N':
-
                             boardArray[row-1][col-3].setPiece(new Piece(PIECE_TYPE.LICORNE, TEAM_COLOR.BLACK_TEAM));
                             break;
                         case 'n':
@@ -98,7 +97,6 @@ public class EscampeBoard implements Partie1 {
                             boardArray[row-1][col-3].setPiece(new Piece(PIECE_TYPE.LICORNE, TEAM_COLOR.WHITE_TEAM));
                             break;
                         case 'b':
-
                             boardArray[row-1][col-3].setPiece(new Piece(PIECE_TYPE.PALADIN, TEAM_COLOR.WHITE_TEAM));
                             break;
                     }
@@ -573,7 +571,7 @@ public class EscampeBoard implements Partie1 {
             for (int j = 0; j < BOARD_SIZE; j++) {
                 Piece currentPiece = boardArray[i][j].getPiece();
                 if (currentPiece != null) {
-                    System.out.print(currentPiece.getPieceType().getStringAccordingToPieceType(currentPiece.getPlayerTeamColor().toString()) + " ");
+                    System.out.print(Printinator.getPieceCharacter(currentPiece.getPieceType(), currentPiece.getPlayerTeamColor()) + " ");
                 } else {
                     System.out.print("- ");
                 }
@@ -647,7 +645,7 @@ public class EscampeBoard implements Partie1 {
                             System.out.print("E ");
                         }
                     } else {
-                        System.out.print(currentPiece.getPieceType().getStringAccordingToPieceType(currentPiece.getPlayerTeamColor().toString()) + " ");
+                        System.out.print(Printinator.getPieceCharacter(currentPiece.getPieceType(), currentPiece.getPlayerTeamColor()) + " ");
                     }
                     /*
                     else if (boardArray[i][j].getPiece().getPlayerId() == 1) {
@@ -686,7 +684,7 @@ public class EscampeBoard implements Partie1 {
 
                 Piece currentPiece = boardArray[i][j].getPiece();
                 if (currentPiece != null) {
-                    res += currentPiece.getPieceType().getStringAccordingToPieceType(currentPiece.getPlayerTeamColor().toString());
+                    res += Printinator.getPieceCharacter(currentPiece.getPieceType(), currentPiece.getPlayerTeamColor());
                 } else {
                     res += "-";
                 }
