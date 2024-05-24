@@ -426,10 +426,14 @@ public class EscampeBoard implements Partie1 {
 
         //get the Case position value
         int currentLisere = this.boardArray[position.getX()][position.getY()].getValue();
-        System.out.println("current lisere : "+currentLisere);
-        System.out.println("position : "+position.toString());
+
+        //Debug prints
+        Printinator.printCurrentLisere(currentLisere);
+        Printinator.printPosition(position);
+
         RegularMove[] potentionalMoves;
         switch (currentLisere){
+
             case 1:
                 for (int i = 0; i < 2; i++) {
                     for (int j = 0; j < 2; j++) {
@@ -444,6 +448,7 @@ public class EscampeBoard implements Partie1 {
                     }
 
                 }
+
                 case 2:
                     potentionalMoves = new RegularMove[8];
                     int index = 0;
@@ -465,6 +470,7 @@ public class EscampeBoard implements Partie1 {
                         }
                     }
                     return potentionalMoves;
+
                 case 3:
                     potentionalMoves = new RegularMove[26];
                     index = 0;
@@ -487,140 +493,7 @@ public class EscampeBoard implements Partie1 {
 
             default:
                     return new RegularMove[0];
-
-
-
-
         }
-
-
-
-
-    }
-
-
-    public void printBoard() {
-        for (int i = 0; i < BOARD_SIZE; i++) {
-            for (int j = 0; j < BOARD_SIZE; j++) {
-                System.out.print(boardArray[i][j].getValue() + " ");
-            }
-            System.out.println();
-        }
-    }
-
-    public void printBoardWithPion() {
-        System.out.println("    A B C D E F");
-        System.out.println("----------------");
-        for (int i = 0; i < BOARD_SIZE; i++) {
-            System.out.print("0" + (i + 1) + " |");
-
-            for (int j = 0; j < BOARD_SIZE; j++) {
-                Piece currentPiece = boardArray[i][j].getPiece();
-                if (currentPiece != null) {
-                    System.out.print(Printinator.getPieceCharacter(currentPiece.getPieceType(), currentPiece.getPlayerTeamColor()) + " ");
-                } else {
-                    System.out.print("- ");
-                }
-            }
-
-            /*
-            for (int j = 0; j < BOARD_SIZE; j++) {
-                if (boardArray[i][j].getPiece() != null) {
-                    if (boardArray[i][j].getPiece().getPlayerTeamColor() == TEAM_COLOR.BLACK_TEAM) {
-                        if (boardArray[i][j].getPiece().getPieceType() == PIECE_TYPE.LICORNE) {
-                            System.out.print(TEAM_COLOR.BLACK_TEAM.toString().toUpperCase() + " ");
-                        } else {
-                            System.out.print(TEAM_COLOR.BLACK_TEAM.toString() + " ");
-                        }
-                    } else {
-                        if (boardArray[i][j].getPiece().getPieceType().equals(PIECE_TYPE.LICORNE)) {
-                            System.out.print("B ");
-                        } else {
-                            System.out.print("b ");
-                        }
-                    }
-
-                } else {
-                    System.out.print("- ");
-                }
-            }
-             */
-            System.out.println();
-        }
-    }
-
-    public void printPossibleMoves(RegularMove[] moves) {
-        //get the nyumber of non null moves
-        int count = 0;
-        for (RegularMove move : moves) {
-            if (move != null) {
-                count++;
-            }
-        }
-
-        System.out.println("nombre de mouvements possibles : " + count);
-        System.out.println("    A B C D E F");
-        System.out.println("----------------");
-        for (int i = 0; i < BOARD_SIZE; i++) {
-            System.out.print("0" + (i + 1) + " |");
-
-            for (int j = 0; j < BOARD_SIZE; j++) {
-
-
-                boolean isPossible = false;
-                for (RegularMove move : moves) {
-                    if (move != null) {
-                        if (move.getEndCoordinate().equals(new Coordinate(j, i))){
-
-
-                            isPossible = true;
-                            break;
-                        }
-                    }
-                }
-
-                Piece currentPiece = boardArray[i][j].getPiece();
-
-                if (currentPiece != null) {
-
-                    if(isPossible) {
-                        //test if the pion is a licorne
-                        if (currentPiece.getPieceType() == PIECE_TYPE.LICORNE) {
-                            System.out.print("X ");
-                        } else {
-                            System.out.print("E ");
-                        }
-                    } else {
-                        System.out.print(Printinator.getPieceCharacter(currentPiece.getPieceType(), currentPiece.getPlayerTeamColor()) + " ");
-                    }
-                    /*
-                    else if (boardArray[i][j].getPiece().getPlayerId() == 1) {
-                        if (boardArray[i][j].getPiece().getType().equals(Piece.PION_TYPE_LICORNE)) {
-                            System.out.print("N ");
-                        } else {
-                            System.out.print("n ");
-                        }
-                    } else {
-                        if (boardArray[i][j].getPiece().getType().equals(Piece.PION_TYPE_LICORNE)) {
-                            System.out.print("B ");
-                        } else {
-                            System.out.print("b ");
-                        }
-                    }
-                     */
-
-                } else {
-                    if(isPossible) {
-                        System.out.print("O ");
-                    }else {
-                        System.out.print("- ");
-                    }
-
-                }
-            }
-            System.out.println();
-        }
-
     }
 
     public String boardToString() {
@@ -634,60 +507,38 @@ public class EscampeBoard implements Partie1 {
                 } else {
                     res += "-";
                 }
-
-                /*
-                if (boardArray[i][j].getPiece() != null) {
-                    if (boardArray[i][j].getPiece().getPlayerId() == 1) {
-                        if (boardArray[i][j].getPiece().getType().equals(Piece.PION_TYPE_LICORNE)) {
-                            res += "N";
-                        } else {
-                            res += "n";
-                        }
-                    } else {
-                        if (boardArray[i][j].getPiece().getType().equals(Piece.PION_TYPE_LICORNE)) {
-                            res += "B";
-                        } else {
-                            res += "b";
-                        }
-
-                    }
-                } else {
-                    res +="-";
-                }
-                 */
             }
         }
         return res;
     }
 
-    //PRIVATE CONSTANTS
-    private static final int BOARD_SIZE = 6;
+    //GETTERS
+    public Case[][] getBoardArray() {
+        return boardArray;
+    }
 
-
-    //add main
+    //PUBLIC STATIC MAIN
     public static void main(String[] args) {
         EscampeBoard escampeBoard = new EscampeBoard();
-        System.out.println("lisere map :");
-        escampeBoard.printBoard();
-        System.out.println();
-        escampeBoard.printBoardWithPion();
-       escampeBoard.setFromFile("src/demo1_board.txt");
-        System.out.println();
-       System.out.println("board after load file :");
-       escampeBoard.printBoardWithPion();
 
-//
+        //Debugging prints
+        Printinator.printBoard(escampeBoard.getBoardArray(), "Lisere map :");
+        Printinator.printLineSpace();
+        Printinator.printBoardWithPion(escampeBoard.getBoardArray(), null);
+
+        escampeBoard.setFromFile("src/demo1_board.txt");
+
+        //Debugging prints
+        Printinator.printLineSpace();
+        Printinator.printBoard(escampeBoard.getBoardArray(), "Board after load file :");
+
         RegularMove[] moves = escampeBoard.possibleMovesPaw(TEAM_COLOR.WHITE_TEAM,new Coordinate("B5"));
-        escampeBoard.printPossibleMoves(moves);
-        System.out.println("possible moves :");
 
-
-        //print all the possible moves if their not null
-        for(RegularMove move : moves){
-            if(move != null){
-                System.out.println(move.toString()+" move : x="+move.getMove().getX()+" y="+move.getMove().getY());
-            }
-        }
+        Printinator.printPossibleMoves(moves, escampeBoard.getBoardArray(), null);
+        Printinator.printListOfPossibleMoves(moves, "Possible moves : ");
 
     }
+
+    //PRIVATE CONSTANTS
+    private static final int BOARD_SIZE = 6;
 }
