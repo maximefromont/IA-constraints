@@ -23,8 +23,9 @@ public class RegularMove extends Move{
         super(teamColor);
         //split the move string into two coordinates the string are in the format B1-B2
         String[] coordinates = move.split("-");
-        Coordinate startCoordinate = new Coordinate(coordinates[0]);
-        Coordinate endCoordinate = new Coordinate(coordinates[1]);
+        this.startCoordinate = new Coordinate(coordinates[0]);
+        this.endCoordinate = new Coordinate(coordinates[1]);
+        this.move = startCoordinate.move(endCoordinate);
     }
 
 
