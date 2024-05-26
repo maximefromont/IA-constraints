@@ -6,7 +6,7 @@ import org.example.enums.TEAM_COLOR;
 public class PositionMove extends Move{
 
     //PRIVATE ATTRIBUTE add an array of 6 coordinates
-    private Coordinate[] coordinates;
+    private final Coordinate[] coordinates;
 
     //CONSTRUCTORS
     public PositionMove(Coordinate[] coordinates, TEAM_COLOR teamColor) {
@@ -22,14 +22,15 @@ public class PositionMove extends Move{
         for (int i = 0; i < 6; i++) {
             coordinatesArray[i] = new Coordinate(coordinates[i]);
         }
+        this.coordinates = coordinatesArray;
     }
 
     //PUBLIC INTERFACE
     @Override
     public String toString() {
-        String result = "";
+        StringBuilder result = new StringBuilder();
         for (Coordinate coordinate : coordinates) {
-            result += coordinate.toString() + "/";
+            result.append(coordinate.toString()).append("/");
         }
         return result.substring(0, result.length() - 1);
     }
