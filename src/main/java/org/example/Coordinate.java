@@ -9,7 +9,7 @@ public class Coordinate {
     private final int y;
 
 
-    //CONSTRUCTOR
+    //CONSTRUCTORS
     public Coordinate(int x, int y) {
         this.y = y;
         this.x = x;
@@ -20,8 +20,8 @@ public class Coordinate {
         this.y = Integer.parseInt(coordinate.substring(1)) - 1;
     }
 
-    //override the toString method
 
+    //PUBLIC METHODS
     public String toString() {
         return (char)('A' + x) + "" + (y + 1);
     }
@@ -34,14 +34,13 @@ public class Coordinate {
         return false;
     }
 
-    //add a function to get the relative move to go from a coordinate to another
     public Coordinate move(Coordinate other){
         return new Coordinate(other.x - x, other.y - y);
 
     }
 
 
-    //PUBLIC INTERFACE
+    //GETTERS
     public int getX() {
         return x;
     }
@@ -50,8 +49,7 @@ public class Coordinate {
         return y;
     }
 
-
-    //add main method
+    //MAIN
     public static void main(String[] args) {
         Coordinate coordinate = new Coordinate(0, 0);
         System.out.println(coordinate);

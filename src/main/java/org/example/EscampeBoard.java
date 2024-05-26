@@ -30,51 +30,17 @@ public class EscampeBoard implements Partie1 {
 
     //CONSTRUCTOR
     public EscampeBoard() {
-        boardArray = new Case[BOARD_SIZE][BOARD_SIZE];
+
 
         //Initializing the board with straight values from the subject
-        //1st line
-        boardArray[0][0] = new Case(1);
-        boardArray[0][1] = new Case(2);
-        boardArray[0][2] = new Case(2);
-        boardArray[0][3] = new Case(3);
-        boardArray[0][4] = new Case(1);
-        boardArray[0][5] = new Case(2);
-        //2nd line
-        boardArray[1][0] = new Case(3);
-        boardArray[1][1] = new Case(1);
-        boardArray[1][2] = new Case(3);
-        boardArray[1][3] = new Case(1);
-        boardArray[1][4] = new Case(3);
-        boardArray[1][5] = new Case(2);
-        //3rd line
-        boardArray[2][0] = new Case(2);
-        boardArray[2][1] = new Case(3);
-        boardArray[2][2] = new Case(1);
-        boardArray[2][3] = new Case(2);
-        boardArray[2][4] = new Case(1);
-        boardArray[2][5] = new Case(3);
-        //4th line
-        boardArray[3][0] = new Case(2);
-        boardArray[3][1] = new Case(1);
-        boardArray[3][2] = new Case(3);
-        boardArray[3][3] = new Case(2);
-        boardArray[3][4] = new Case(3);
-        boardArray[3][5] = new Case(1);
-        //5th line
-        boardArray[4][0] = new Case(1);
-        boardArray[4][1] = new Case(3);
-        boardArray[4][2] = new Case(1);
-        boardArray[4][3] = new Case(3);
-        boardArray[4][4] = new Case(1);
-        boardArray[4][5] = new Case(2);
-        //6th line
-        boardArray[5][0] = new Case(3);
-        boardArray[5][1] = new Case(2);
-        boardArray[5][2] = new Case(2);
-        boardArray[5][3] = new Case(1);
-        boardArray[5][4] = new Case(3);
-        boardArray[5][5] = new Case(2);
+        this.boardArray = new Case[][]{
+                {new Case(1), new Case(2), new Case(2), new Case(3), new Case(1), new Case(2)},
+                {new Case(3), new Case(1), new Case(3), new Case(1), new Case(3), new Case(2)},
+                {new Case(2), new Case(3), new Case(1), new Case(2), new Case(1), new Case(3)},
+                {new Case(2), new Case(1), new Case(3), new Case(2), new Case(3), new Case(1)},
+                {new Case(1), new Case(3), new Case(1), new Case(3), new Case(1), new Case(2)},
+                {new Case(3), new Case(2), new Case(2), new Case(1), new Case(3), new Case(2)}
+        };
     }
 
     @Override
@@ -93,18 +59,16 @@ public class EscampeBoard implements Partie1 {
                 for (int col = 3; col < line.length() - 3; col++) {
                     char c = line.charAt(col);
                     switch (c) {
-                        case 'N':
-
+                        case Printinator.LICORNE_FROM_BLACK_TEAM_IDENTIFIER:
                             boardArray[row-1][col-3].setPiece(new Piece(PIECE_TYPE.LICORNE, TEAM_COLOR.BLACK_TEAM));
                             break;
-                        case 'n':
+                        case Printinator.PALADIN_FROM_BLACK_TEAM_IDENTIFIER:
                             boardArray[row-1][col-3].setPiece(new Piece(PIECE_TYPE.PALADIN, TEAM_COLOR.BLACK_TEAM));
                             break;
-                        case 'B':
+                        case Printinator.LICORNE_FROM_WHITE_TEAM_IDENTIFIER:
                             boardArray[row-1][col-3].setPiece(new Piece(PIECE_TYPE.LICORNE, TEAM_COLOR.WHITE_TEAM));
                             break;
-                        case 'b':
-
+                        case Printinator.PALADIN_FROM_WHITE_TEAM_IDENTIFIER:
                             boardArray[row-1][col-3].setPiece(new Piece(PIECE_TYPE.PALADIN, TEAM_COLOR.WHITE_TEAM));
                             break;
                     }
@@ -117,15 +81,14 @@ public class EscampeBoard implements Partie1 {
 
     @Override
     public void saveToFile(String fileName) {
+        //CONSTANTS FOR THE METHOD
+        final String FILE_FIRST_LINE = "% ABCDEF\n";
+
         File file = new File(fileName);
 
         if (!file.exists()) {
             try {
-                if (file.createNewFile()) {
-                    System.out.println("File created: " + file.getName());
-                } else {
-                    System.out.println("File already exists.");
-                }
+                Printinator.printFileCreationMessage(fileName, file.createNewFile());
             } catch (IOException e) {
                 System.out.println("An error occurred.");
                 Logger.getLogger(EscampeBoard.class.getName()).log(Level.SEVERE, "An error occurred.", e);
@@ -137,17 +100,13 @@ public class EscampeBoard implements Partie1 {
 
             //create the file if it does not exist
 
-
-            //write to the first line of the file "% ABCDEF"
-            writer.write("% ABCDEF\n");
+            writer.write(FILE_FIRST_LINE);
             String boardString= boardToString();
 
             for (int i = 0; i < 6; i++) {
                 writer.write("0"+(i+1)+" "+boardString.substring(i*6,i*6+6)+" 0"+(i+1)+"\n");
             }
-            writer.write("% ABCDEF\n");
-
-
+            writer.write(FILE_FIRST_LINE);
 
             writer.close();
 
@@ -258,7 +217,15 @@ public class EscampeBoard implements Partie1 {
         return BlackTeamWin || WhiteTeamWin;
     }
 
+
+
     //////////////////////////////////////////////////////////PERSONAL FUNCTION/////////////////////////////////////////////////////
+
+
+    public Case[][] getBoardArray() {
+        return boardArray;
+    }
+
     public int  playedCoups(){
         return move.size();
     }
@@ -408,8 +375,8 @@ public class EscampeBoard implements Partie1 {
                 else {
                     return false;
                 }
-    }
-    return false;
+        }
+        return false;
     }
 
     private boolean isAdverseLicorne(RegularMove regularMove) {
@@ -438,7 +405,7 @@ public class EscampeBoard implements Partie1 {
                     }
                 }
                 //test if the player is the right one
-                if (player.equals("noir")) {
+                if (move.getTeamColor().equals(TEAM_COLOR.BLACK_TEAM)) {
 
                     //check if the coordinates are in the right place
                     if (((PositionMove) move).getCoordinates()[0].getX() < 2) {
@@ -493,11 +460,8 @@ public class EscampeBoard implements Partie1 {
                 }
                 return isValidMoveFromLisere(regularMove, lastLisere);
             default:
-                throw new IllegalStateException("Unexpected value: " + move.getClass().getName());
+                throw new IllegalStateException(Printinator.getUnexpectedValueErrorMessage(move.getClass().getName()));
         }
-       
-
-
     }
 
     //get all the possible moves for a prawn at a given position
@@ -526,6 +490,7 @@ public class EscampeBoard implements Partie1 {
                                 }
                             }
                         }
+
                     }
 
                 }
@@ -688,19 +653,19 @@ public class EscampeBoard implements Partie1 {
     //PRIVATE CONSTANTS
     private static final int BOARD_SIZE = 6;
 
+
     //add main
     public static void main(String[] args) {
 
         //TODO make a test for the class
         EscampeBoard escampeBoard = new EscampeBoard();
-        System.out.println("lisere map :");
-        escampeBoard.printBoard();
-        System.out.println();
-        escampeBoard.printBoardWithPion();
-       escampeBoard.setFromFile("src/demo1_board.txt");
-        System.out.println();
-       System.out.println("board after load file :");
-       escampeBoard.printBoardWithPion();
+
+        //Debugging prints
+        Printinator.printBoard(escampeBoard.getBoardArray(), "Lisere map :");
+        Printinator.printLineSpace();
+        Printinator.printBoardWithPion(escampeBoard.getBoardArray(), null);
+
+        escampeBoard.setFromFile("src/demo1_board.txt");
 
        //tes possible move for black in F5
         RegularMove[] movesB2 = escampeBoard.possibleMovesPaw("blanc",new Coordinate("B2"));
