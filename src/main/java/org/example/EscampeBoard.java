@@ -4,7 +4,8 @@ import org.example.enums.TEAM_COLOR;
 import org.example.move.Move;
 import org.example.move.PositionMove;
 import org.example.move.RegularMove;
-
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import java.io.*;
 import java.io.BufferedReader;
@@ -17,10 +18,15 @@ import static java.lang.StrictMath.abs;
 
 public class EscampeBoard implements Partie1 {
 
+    private static final Logger LOGGER = Logger.getLogger(EscampeBoard.class.getName());
+
     //PRIVATE ATTRIBUTES
-    private ArrayList<Move> move;
-    private Case[][] boardArray;
+    private final ArrayList<Move> move = new ArrayList<>();
+    private final Case[][] boardArray;
     private int lastLisere = -1;
+    private boolean BlackTeamWin =  false;
+    private boolean WhiteTeamWin =  false;
+
 
     //CONSTRUCTOR
     public EscampeBoard() {
@@ -105,7 +111,7 @@ public class EscampeBoard implements Partie1 {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            LOGGER.log(Level.SEVERE, "An error occurred.", e);
         }
     }
 
@@ -122,7 +128,7 @@ public class EscampeBoard implements Partie1 {
                 }
             } catch (IOException e) {
                 System.out.println("An error occurred.");
-                e.printStackTrace();
+                Logger.getLogger(EscampeBoard.class.getName()).log(Level.SEVERE, "An error occurred.", e);
             }
         }
 
@@ -146,7 +152,7 @@ public class EscampeBoard implements Partie1 {
             writer.close();
 
         } catch (IOException e) {
-            e.printStackTrace();
+            Logger.getLogger(EscampeBoard.class.getName()).log(Level.SEVERE, "An error occurred.", e);
         }
 
 
@@ -155,7 +161,7 @@ public class EscampeBoard implements Partie1 {
 
     @Override
     public boolean isValidMove(String move, String player) {
-            if (move.length() == 2) {
+            if (move.length() == 5) {
                 return isValidMove(new RegularMove(move, player.equals("blanc") ? TEAM_COLOR.WHITE_TEAM : TEAM_COLOR.BLACK_TEAM), player);
             }
             return true;
@@ -200,11 +206,56 @@ public class EscampeBoard implements Partie1 {
 
     @Override
     public void play(String move, String player) {
+        if (move.length() == 5) {
+            RegularMove regularMove = new RegularMove(move, player.equals("blanc") ? TEAM_COLOR.WHITE_TEAM : TEAM_COLOR.BLACK_TEAM);
+            if (isValidMove(regularMove, player)) {
+                //get the start and end coordinate
+                Coordinate startCoordinate = regularMove.getStartCoordinate();
+                Coordinate endCoordinate = regularMove.getEndCoordinate();
+
+                //get the piece to move
+                Piece piece = boardArray[startCoordinate.getY()][startCoordinate.getX()].getPiece();
+
+                //if the end case  contains a licorne the game is over
+                if (boardArray[endCoordinate.getY()][endCoordinate.getX()].getPiece() != null) {
+                    if (boardArray[endCoordinate.getY()][endCoordinate.getX()].getPiece().getPieceType() == PIECE_TYPE.LICORNE) {
+                        if (boardArray[endCoordinate.getY()][endCoordinate.getX()].getPiece().getPlayerTeamColor() == TEAM_COLOR.BLACK_TEAM) {
+                            WhiteTeamWin = true;
+                        } else {
+                            BlackTeamWin = true;
+                        }
+                    }
+                }
+
+                //move the piece
+                boardArray[startCoordinate.getY()][startCoordinate.getX()].setPiece(null);
+                boardArray[endCoordinate.getY()][endCoordinate.getX()].setPiece(piece);
+
+                //update the last lisere
+                lastLisere = boardArray[endCoordinate.getY()][endCoordinate.getX()].getValue();
+
+                //add the move to the move list
+                this.move.add(regularMove);
+            }
+        }else {
+            PositionMove positionMove = new PositionMove(move, player.equals("blanc") ? TEAM_COLOR.WHITE_TEAM : TEAM_COLOR.BLACK_TEAM);
+            if (isValidMove(positionMove, player)) {
+                //get the coordinates
+                Coordinate[] coordinates = positionMove.getCoordinates();
+
+                //placer des pions sur les 5 premières cases et une licorne sur la 6ème
+                for (int i = 0; i < 5; i++) {
+                    boardArray[coordinates[i].getY()][coordinates[i].getX()].setPiece(new Piece(PIECE_TYPE.PALADIN, player.equals("blanc") ? TEAM_COLOR.WHITE_TEAM : TEAM_COLOR.BLACK_TEAM));
+                }
+                boardArray[coordinates[5].getY()][coordinates[5].getX()].setPiece(new Piece(PIECE_TYPE.LICORNE, player.equals("blanc") ? TEAM_COLOR.WHITE_TEAM : TEAM_COLOR.BLACK_TEAM));
+
+            }
+        }
     }
 
     @Override
     public boolean gameOver() {
-        return false;
+        return BlackTeamWin || WhiteTeamWin;
     }
 
     //////////////////////////////////////////////////////////PERSONAL FUNCTION/////////////////////////////////////////////////////
@@ -406,7 +457,7 @@ public class EscampeBoard implements Partie1 {
 
 
                 } else if (player.equals("blanc")) {
-                    //chekc if the first this.move is a positionmove
+                    //check if the first this.move is a position move
                     if (playedCoups() == 0) {
                         return true;
                     } else if (this.move.getFirst() instanceof PositionMove) {
@@ -524,7 +575,9 @@ public class EscampeBoard implements Partie1 {
                 potentialMoves[index3] = new RegularMove(new Coordinate(position.getX(), position.getY()), new Coordinate(position.getX() + i, position.getY() + j), playerColor);
                 index3++;
             }
-        }}finally {
+        }
+        return  index3;
+        }catch (Exception e){
             return index3;
         }
 
@@ -558,7 +611,7 @@ public class EscampeBoard implements Partie1 {
     }
 
     public void printPossibleMoves(RegularMove[] moves) {
-        //get the nyumber of non null moves
+        //get the number of non-null moves
         int count = 0;
         for (RegularMove move : moves) {
             if (move != null) {
@@ -566,7 +619,7 @@ public class EscampeBoard implements Partie1 {
             }
         }
 
-        System.out.println("nombre de mouvements possibles : " + count);
+        System.out.println("number of movements possibles : " + count);
         System.out.println("    A B C D E F");
         System.out.println("----------------");
         for (int i = 0; i < BOARD_SIZE; i++) {
@@ -637,6 +690,8 @@ public class EscampeBoard implements Partie1 {
 
     //add main
     public static void main(String[] args) {
+
+        //TODO make a test for the class
         EscampeBoard escampeBoard = new EscampeBoard();
         System.out.println("lisere map :");
         escampeBoard.printBoard();
@@ -647,7 +702,7 @@ public class EscampeBoard implements Partie1 {
        System.out.println("board after load file :");
        escampeBoard.printBoardWithPion();
 
-       //tes possible move foir black in F5
+       //tes possible move for black in F5
         RegularMove[] movesB2 = escampeBoard.possibleMovesPaw("blanc",new Coordinate("B2"));
         escampeBoard.printPossibleMoves(movesB2);
         System.out.println("possible moves :");
@@ -659,7 +714,7 @@ public class EscampeBoard implements Partie1 {
         }
 
 
-//       //get in an arry all the corrdinate of black piece and in other all coordinate pf whit piece
+//       //get in an array all the coordinate of black piece and in other all coordinate pf whit piece
 //
         ArrayList<Coordinate> blackPiece = new ArrayList<>();
         ArrayList<Coordinate> whitePiece = new ArrayList<>();
@@ -699,11 +754,7 @@ public class EscampeBoard implements Partie1 {
 
 
 
-//       System.out.println("is B5-A5 a valid move : "+escampeBoard.isValidMove("B5-A5","noir"));
-//         System.out.println("is B5-A3 a valid move : "+escampeBoard.isValidMove("B5-A3","noir"));
-//        System.out.println("is B5-B3 a valid move : "+escampeBoard.isValidMove("B5-B3","noir"));
-//
-//
+
         System.out.println("possible moves :");
         String[] moves = escampeBoard.possiblesMoves("noir");
         System.out.println("possible moves black:");
@@ -720,18 +771,10 @@ public class EscampeBoard implements Partie1 {
             System.out.println(move);
         }
 
-//          test possible paw move
-//        RegularMove[] moves = escampeBoard.possibleMovesPaw("noir",new Coordinate("B5"));
-//        escampeBoard.printPossibleMoves(moves);
-//        System.out.println("possible moves :");
-//
-//
-//        //print all the possible moves if their not null
-//        for(RegularMove move : moves){
-//            if(move != null){
-//                System.out.println(move+" move : x="+move.getMove().getX()+" y="+move.getMove().getY());
-//            }
-//        }
+
+
+        escampeBoard.play("B5-A5","noir");
+        escampeBoard.printBoardWithPion();
 
     }
 }

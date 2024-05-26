@@ -3,17 +3,8 @@ package org.example;
 import org.example.enums.PIECE_TYPE;
 import org.example.enums.TEAM_COLOR;
 
-public class Piece {
-
-    //PRIVATE INTERFACE
-    private PIECE_TYPE pieceType;
-    private TEAM_COLOR playerTeamColor;
-
-    //CONSTRUCTOR
-    public Piece(PIECE_TYPE pieceType, TEAM_COLOR playerTeamColor) {
-        this.pieceType = pieceType;
-        this.playerTeamColor = playerTeamColor;
-    }
+public record Piece (PIECE_TYPE pieceType,
+     TEAM_COLOR playerTeamColor){
 
     //PUBLIC INTERFACE
     public PIECE_TYPE getPieceType() {

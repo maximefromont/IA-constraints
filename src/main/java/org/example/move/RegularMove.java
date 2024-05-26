@@ -6,9 +6,9 @@ import org.example.enums.TEAM_COLOR;
 public class RegularMove extends Move{
 
     //PRIVATE ATTRIBUTE
-    private Coordinate startCoordinate;
-    private Coordinate endCoordinate;
-    private Coordinate move;
+    private final Coordinate startCoordinate;
+    private final Coordinate endCoordinate;
+    private final Coordinate move;
 
     //CONSTRUCTORS
     public RegularMove(Coordinate startCoordinate, Coordinate endCoordinate, TEAM_COLOR teamColor) {
