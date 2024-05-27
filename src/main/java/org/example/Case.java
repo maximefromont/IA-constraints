@@ -4,7 +4,7 @@ public class Case {
 
     //PRIVATE ATTRIBUTES
     private Piece piece;
-    private int value;
+    private final int value;
 
     //CONSTRUCTOR
     public Case(int value) {

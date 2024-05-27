@@ -5,8 +5,8 @@ public class Coordinate {
 
 
     //PRIVATE ATTRIBUTES
-    private int x;
-    private int y;
+    private final int x;
+    private final int y;
 
 
     //CONSTRUCTORS
@@ -27,8 +27,7 @@ public class Coordinate {
     }
 
     public boolean equals(Object obj) {
-        if (obj instanceof Coordinate) {
-            Coordinate other = (Coordinate) obj;
+        if (obj instanceof Coordinate other) {
             return x == other.x && y == other.y;
         }
         return false;
@@ -51,7 +50,7 @@ public class Coordinate {
     //MAIN
     public static void main(String[] args) {
         Coordinate coordinate = new Coordinate(0, 0);
-        System.out.println(coordinate.toString());
+        System.out.println(coordinate);
         System.out.println(coordinate.move(new Coordinate(1, 1)).toString());
         System.out.println(coordinate.move(new Coordinate(1, 0)).toString());
         System.out.println(coordinate.move(new Coordinate(0, 1)).toString());
@@ -59,15 +58,15 @@ public class Coordinate {
         System.out.println(coordinate.move(new Coordinate(-1, 0)).toString());
         System.out.println(coordinate.move(new Coordinate(0, -1)).toString());
 
-        System.out.println("A1: "+new Coordinate("A1").toString());
-        System.out.println("B2: "+new Coordinate("B2").toString());
-        System.out.println("C3: "+new Coordinate("C3").toString());
-        System.out.println("D4: "+new Coordinate("D4").toString());
-        System.out.println("E5: "+new Coordinate("E5").toString());
-        System.out.println("F6: "+new Coordinate("F6").toString());
+        System.out.println("A1: "+ new Coordinate("A1"));
+        System.out.println("B2: "+ new Coordinate("B2"));
+        System.out.println("C3: "+ new Coordinate("C3"));
+        System.out.println("D4: "+ new Coordinate("D4"));
+        System.out.println("E5: "+ new Coordinate("E5"));
+        System.out.println("F6: "+ new Coordinate("F6"));
 
-        System.out.println("A2: "+new Coordinate("A2").toString());
-        System.out.println("B3: "+new Coordinate("B3").toString());
+        System.out.println("A2: "+ new Coordinate("A2"));
+        System.out.println("B3: "+ new Coordinate("B3"));
 
 
         Assert.assertEquals("A1", new Coordinate(0,0).toString());
