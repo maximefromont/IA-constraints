@@ -3,20 +3,20 @@ package org.example;
 public class Case {
 
     //PRIVATE ATTRIBUTES
-    private Pion pion;
-    private int value;
+    private Piece piece;
+    private final int value;
 
     //CONSTRUCTOR
     public Case(int value) {
         this.value = value;
     }
 
-    public Pion getPion() {
-        return pion;
+    public Piece getPiece() {
+        return piece;
     }
 
-    public void setPion(Pion pion) {
-        this.pion = pion;
+    public void setPiece(Piece piece) {
+        this.piece = piece;
     }
 
     public int getValue() {

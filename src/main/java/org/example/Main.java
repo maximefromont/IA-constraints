@@ -3,8 +3,15 @@ package org.example;
 public class Main {
     public static void main(String[] args) {
         EscampeBoard escampeBoard = new EscampeBoard();
-        escampeBoard.printBoard();
-        escampeBoard.setFromFile("/home/kevin/Cour/résolution de contrainte/projet/demo1_board.txt");
-        escampeBoard.printBoardWithPion();
+
+        //Debugging prints
+        Printinator.printBoard(escampeBoard.getBoardArray(), null);
+
+        escampeBoard.setFromFile("src/demo1_board.txt");
+
+        //Debugging prints
+        Printinator.printBoardWithPion(escampeBoard.getBoardArray(), null);
+
+        escampeBoard.saveToFile("src/demo2_board.txt");
     }
 }
