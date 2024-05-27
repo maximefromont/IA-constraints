@@ -639,6 +639,8 @@ public class EscampeBoard implements Partie1 {
         escampeBoard.play("B5-A5", TEAM_COLOR.BLACK_TEAM_LOWERCASE);
         Printinator.printBoardWithPion(escampeBoard.getBoardArray(), null);
 
+        //Ceci est un commentaire fait à la toute fin du merge
+
     }
 
     //PRIVATE CONSTANTS
