@@ -1,5 +1,7 @@
 package org.example.enums;
 
+import org.example.Printinator;
+
 public enum PIECE_TYPE {
 
     LICORNE,
@@ -12,5 +14,7 @@ public enum PIECE_TYPE {
             return team_color.toLowerCase();
         }
     }
+
+
 
 }
