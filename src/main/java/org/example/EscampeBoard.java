@@ -231,7 +231,7 @@ public class EscampeBoard implements Partie1 {
     }
 
     public boolean isFree(Coordinate coordinate) {
-        return boardArray[coordinate.getY()][coordinate.getX()].getPiece() == null;
+        return isInBoard(coordinate) && boardArray[coordinate.getY()][coordinate.getX()].getPiece() == null;
     }
 
     public boolean isInBoard(Coordinate coordinate) {

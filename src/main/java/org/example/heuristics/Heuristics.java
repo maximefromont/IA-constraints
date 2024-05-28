@@ -3,7 +3,7 @@ package org.example.heuristics;
 import org.example.EscampeBoard;
 
 public class Heuristics {
-    public int mobilityHeuristic(EscampeBoard board, String player){
+    public static int mobilityHeuristic(EscampeBoard board, String player){
         String opponent = "noir";
         if(player.equals("noir")){
             opponent = "blanc";
