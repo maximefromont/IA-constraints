@@ -7,17 +7,20 @@ import org.example.move.RegularMove;
 public class JoueurAleatoire implements IJoueur {
 
     //PRIVATE ATTRIBUTES
+    private int id;
     private TEAM_COLOR playerColor;
     private EscampeBoard board; //This is a reference to the board that is instancied in the main
 
 
     //CONSTRUCTOR
-    public JoueurAleatoire(EscampeBoard board) {
-        this.board = board; //The board is instancied in the constructor, however it's important that the referee call the initJoueur method before actually starting to play
+    public JoueurAleatoire() {
     }
 
     @Override
     public void initJoueur(int mycolour) {
+        this.id = (int) (Math.random() * 1000);
+        this.board = new EscampeBoard();
+        //this.board.setFromFile("src/demo1_board.txt");
         this.playerColor = TEAM_COLOR.getTeamColorFromInt(mycolour);
     }
 
@@ -58,6 +61,6 @@ public class JoueurAleatoire implements IJoueur {
 
     @Override
     public String binoName() {
-        return null;
+        return "Golmonisator" + " - " + id;
     }
 }
