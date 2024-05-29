@@ -22,6 +22,7 @@ public class EscampeBoard implements Partie1 {
 
     //PRIVATE ATTRIBUTES
     private final ArrayList<Move> move = new ArrayList<>();
+
     private Case[][] boardArray;
     private int lastLisere = -1;
     private boolean BlackTeamWin =  false;
@@ -113,18 +114,14 @@ public class EscampeBoard implements Partie1 {
         } catch (IOException e) {
             Logger.getLogger(EscampeBoard.class.getName()).log(Level.SEVERE, "An error occurred.", e);
         }
-
-
-
     }
 
     @Override
     public boolean isValidMove(String move, String player) {
-            if (move.length() == 5) {
+            if (move.length() == 2) {
                 return isValidMove(new RegularMove(move, TEAM_COLOR.getTeamColorFromString(player)));
             }
             return true;
-
     }
 
     @Override
@@ -218,8 +215,6 @@ public class EscampeBoard implements Partie1 {
         return BlackTeamWin || WhiteTeamWin;
     }
 
-
-
     //////////////////////////////////////////////////////////PERSONAL FUNCTION/////////////////////////////////////////////////////
     public int  playedCoups(){
         return move.size();
@@ -283,7 +278,7 @@ public class EscampeBoard implements Partie1 {
                     return false;
                 }
                 else if(regularMove.getMove().equals(new Coordinate(0,3))){
-                   // System.out.println("test B2");
+                    System.out.println("test B2");
                     return (this.isFree(new Coordinate(regularMove.getStartCoordinate().getX(),regularMove.getStartCoordinate().getY()+1)) &&
                             this.isFree(new Coordinate(regularMove.getStartCoordinate().getX(),regularMove.getStartCoordinate().getY()+2)));
                 } else if (regularMove.getMove().equals(new Coordinate(0,-3))) {
@@ -406,44 +401,42 @@ public class EscampeBoard implements Partie1 {
                 if (move.getTeamColor().equals(TEAM_COLOR.BLACK_TEAM)) {
 
                     //check if the coordinates are in the right place
-                    if (((PositionMove) move).getCoordinates()[0].getX() < 2) {
+                    if (((PositionMove) move).getCoordinates()[0].getY() < 2) {
                         for (int i = 0; i < 6; i++) {
-                            if (((PositionMove) move).getCoordinates()[i].getX() >= 2) {
+                            if (((PositionMove) move).getCoordinates()[i].getY() >= 2) {
                                 return false;
                             }
                         }
                     } else {
                         for (int i = 0; i < 6; i++) {
-                            if (((PositionMove) move).getCoordinates()[i].getX() <= 3) {
+                            if (((PositionMove) move).getCoordinates()[i].getY() <= 3) {
                                 return false;
                             }
                         }
                     }
-
+                    return true;
 
                 } else if (move.getTeamColor().equals(TEAM_COLOR.WHITE_TEAM)) {
                     //chekc if the first this.move is a positionmove
                     if (playedCoups() == 0) {
-                        return true;
+                        return false;
                     } else if (this.move.getFirst() instanceof PositionMove) {
                         Coordinate firstMoveCoordinate = ((PositionMove) this.move.getFirst()).getCoordinates()[0];
                         for (int i = 0; i < 6; i++) {
-                            if (firstMoveCoordinate.getX() < 2) {
-                                if (((PositionMove) move).getCoordinates()[i].getX() > 3) {
+                            if (firstMoveCoordinate.getY() <= 2) {
+                                if (((PositionMove) move).getCoordinates()[i].getY() <= 2) {
                                     return false;
                                 }
                             } else {
-                                if (((PositionMove) move).getCoordinates()[i].getX() < 2) {
+                                if (((PositionMove) move).getCoordinates()[i].getY() > 2) {
                                     return false;
                                 }
                             }
                         }
-
+                        return true;
                     } else {
                         return false;
                     }
-
-
                 }
                 break;
 
@@ -492,7 +485,6 @@ public class EscampeBoard implements Partie1 {
                                 }
                             }
                         }
-
                     }
 
                 }
