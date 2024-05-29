@@ -22,7 +22,8 @@ public class EscampeBoard implements Partie1 {
 
     //PRIVATE ATTRIBUTES
     private final ArrayList<Move> move = new ArrayList<>();
-    private final Case[][] boardArray;
+
+    private Case[][] boardArray;
     private int lastLisere = -1;
     private boolean BlackTeamWin =  false;
     private boolean WhiteTeamWin =  false;
@@ -30,10 +31,10 @@ public class EscampeBoard implements Partie1 {
 
     //CONSTRUCTOR
     public EscampeBoard() {
-
+        boardArray = new Case[BOARD_SIZE][BOARD_SIZE];
 
         //Initializing the board with straight values from the subject
-        this.boardArray = new Case[][]{
+        boardArray = new Case[][]{
                 {new Case(1), new Case(2), new Case(2), new Case(3), new Case(1), new Case(2)},
                 {new Case(3), new Case(1), new Case(3), new Case(1), new Case(3), new Case(2)},
                 {new Case(2), new Case(3), new Case(1), new Case(2), new Case(1), new Case(3)},
@@ -88,10 +89,13 @@ public class EscampeBoard implements Partie1 {
 
         if (!file.exists()) {
             try {
-                Printinator.printFileCreationMessage(fileName, file.createNewFile());
+                if (file.createNewFile()) {
+                    Printinator.printFileCreationMessage(fileName, true);
+                } else {
+                    Printinator.printFileCreationMessage(fileName, false);
+                }
             } catch (IOException e) {
-                System.out.println("An error occurred.");
-                Logger.getLogger(EscampeBoard.class.getName()).log(Level.SEVERE, "An error occurred.", e);
+                e.printStackTrace();
             }
         }
 
@@ -113,18 +117,14 @@ public class EscampeBoard implements Partie1 {
         } catch (IOException e) {
             Logger.getLogger(EscampeBoard.class.getName()).log(Level.SEVERE, "An error occurred.", e);
         }
-
-
-
     }
 
     @Override
     public boolean isValidMove(String move, String player) {
-            if (move.length() == 5) {
-                return isValidMove(new RegularMove(move, player.equals("blanc") ? TEAM_COLOR.WHITE_TEAM : TEAM_COLOR.BLACK_TEAM), player);
+            if (move.length() == 2) {
+                return isValidMove(new RegularMove(move, TEAM_COLOR.getTeamColorFromString(player)));
             }
             return true;
-
     }
 
     @Override
@@ -146,7 +146,7 @@ public class EscampeBoard implements Partie1 {
         //get all the possible moves for all the pawns
         ArrayList<RegularMove> possibleMoves = new ArrayList<>();
         for (Coordinate coordinate : pawnsCoordinates) {
-            RegularMove[] moves = possibleMovesPaw(player, coordinate);
+            RegularMove[] moves = possibleMovesPaw(TEAM_COLOR.getTeamColorFromString(player), coordinate);
             for (RegularMove move : moves) {
                 if (move != null) {
                     possibleMoves.add(move);
@@ -166,8 +166,8 @@ public class EscampeBoard implements Partie1 {
     @Override
     public void play(String move, String player) {
         if (move.length() == 5) {
-            RegularMove regularMove = new RegularMove(move, player.equals("blanc") ? TEAM_COLOR.WHITE_TEAM : TEAM_COLOR.BLACK_TEAM);
-            if (isValidMove(regularMove, player)) {
+            RegularMove regularMove = new RegularMove(move, TEAM_COLOR.getTeamColorFromString(player));
+            if (isValidMove(regularMove)) {
                 //get the start and end coordinate
                 Coordinate startCoordinate = regularMove.getStartCoordinate();
                 Coordinate endCoordinate = regularMove.getEndCoordinate();
@@ -198,7 +198,7 @@ public class EscampeBoard implements Partie1 {
             }
         }else {
             PositionMove positionMove = new PositionMove(move, player.equals("blanc") ? TEAM_COLOR.WHITE_TEAM : TEAM_COLOR.BLACK_TEAM);
-            if (isValidMove(positionMove, player)) {
+            if (isValidMove(positionMove)) {
                 //get the coordinates
                 Coordinate[] coordinates = positionMove.getCoordinates();
 
@@ -217,15 +217,7 @@ public class EscampeBoard implements Partie1 {
         return BlackTeamWin || WhiteTeamWin;
     }
 
-
-
     //////////////////////////////////////////////////////////PERSONAL FUNCTION/////////////////////////////////////////////////////
-
-
-    public Case[][] getBoardArray() {
-        return boardArray;
-    }
-
     public int  playedCoups(){
         return move.size();
     }
@@ -242,6 +234,7 @@ public class EscampeBoard implements Partie1 {
     public boolean isValidMoveFromLisere(RegularMove regularMove,int lisereValue){
         boolean adverseLicorne = isAdverseLicorne(regularMove);
         switch (lisereValue){
+
             case 1:
                 //test if the final case is free or if there is an adverse licorne
                 return this.isFree(regularMove.getEndCoordinate()) &&! adverseLicorne;
@@ -281,12 +274,13 @@ public class EscampeBoard implements Partie1 {
                 else {
                     return false;
                 }
+
             case 3:
                 if (!this.isFree(regularMove.getEndCoordinate())&&!adverseLicorne) {
                     return false;
                 }
                 else if(regularMove.getMove().equals(new Coordinate(0,3))){
-                   // System.out.println("test B2");
+                    System.out.println("test B2");
                     return (this.isFree(new Coordinate(regularMove.getStartCoordinate().getX(),regularMove.getStartCoordinate().getY()+1)) &&
                             this.isFree(new Coordinate(regularMove.getStartCoordinate().getX(),regularMove.getStartCoordinate().getY()+2)));
                 } else if (regularMove.getMove().equals(new Coordinate(0,-3))) {
@@ -392,10 +386,11 @@ public class EscampeBoard implements Partie1 {
         return adverseLicorne;
     }
 
-    public boolean isValidMove(Move move, String player) {
-        //make a switch case to test the type of the move
-        switch (move.getClass().getName()) {
-            case "org.example.move.PositionMove":
+    public boolean isValidMove(Move move) {
+
+        switch (move) {
+
+            case PositionMove positionMove:
 
                 for (int i = 0; i < 6; i++) {
                     for (int j = i + 1; j < 6; j++) {
@@ -423,8 +418,8 @@ public class EscampeBoard implements Partie1 {
                     }
 
 
-                } else if (player.equals("blanc")) {
-                    //check if the first this.move is a position move
+                } else if (move.getTeamColor().equals(TEAM_COLOR.WHITE_TEAM)) {
+                    //chekc if the first this.move is a positionmove
                     if (playedCoups() == 0) {
                         return true;
                     } else if (this.move.getFirst() instanceof PositionMove) {
@@ -444,14 +439,10 @@ public class EscampeBoard implements Partie1 {
                     } else {
                         return false;
                     }
-
-
                 }
+                break;
 
-            case "org.example.move.RegularMove":
-                //convert the move to a regular move
-                assert move instanceof RegularMove;
-                RegularMove regularMove = (RegularMove) move;
+            case RegularMove regularMove:
 
                 //test if last lisiere is defined
                 if (lastLisere == -1) {
@@ -462,21 +453,27 @@ public class EscampeBoard implements Partie1 {
             default:
                 throw new IllegalStateException(Printinator.getUnexpectedValueErrorMessage(move.getClass().getName()));
         }
+        return false; //By default
     }
 
     //get all the possible moves for a prawn at a given position
-    public RegularMove[] possibleMovesPaw(String player, Coordinate position) {
-        TEAM_COLOR playerColor = player.equals("blanc") ? TEAM_COLOR.WHITE_TEAM : TEAM_COLOR.BLACK_TEAM;
+    public RegularMove[] possibleMovesPaw(TEAM_COLOR playerColor, Coordinate position) {
 
         //test if start position is get a piece of the current player
         if (this.boardArray[position.getY()][position.getX()].getPiece() == null || this.boardArray[position.getY()][position.getX()].getPiece().getPlayerTeamColor() != playerColor) {
             return new RegularMove[0];
         }
 
-        //get the Case position value
+        RegularMove[] potentionalMoves;
         int currentLisere = this.boardArray[position.getY()][position.getX()].getValue();
         RegularMove[] potentialMoves;
+
+        //Debug prints
+        Printinator.printCurrentLisere(currentLisere);
+        Printinator.printPosition(position);
+
         switch (currentLisere){
+
             case 1:
                 potentialMoves = new RegularMove[4];
                 int index = 0;
@@ -490,10 +487,10 @@ public class EscampeBoard implements Partie1 {
                                 }
                             }
                         }
-
                     }
 
                 }
+
                 return potentialMoves;
                 case 2:
                     potentialMoves = new RegularMove[8];
@@ -501,7 +498,7 @@ public class EscampeBoard implements Partie1 {
                     for (int i = -2; i <= 2; i++) {
                         for (int j = -2; j <= 2; j++) {
                             if (abs(i) + abs(j) == 2) {
-                                index2 = getPotentialMove(player, position, playerColor, potentialMoves, index2, i, j);
+                                index2 = getPotentialMove(position, playerColor, potentialMoves, index2, i, j);
                             }
                         }
                     }
@@ -513,7 +510,7 @@ public class EscampeBoard implements Partie1 {
                         for (int j = -3; j <= 3; j++) {
                             int i1 = abs(i) + abs(j);
                             if ((3 == i1) || (i1 == 1)){
-                                index3 = getPotentialMove(player, position, playerColor, potentialMoves, index3, i, j);
+                                index3 = getPotentialMove(position, playerColor, potentialMoves, index3, i, j);
                             }
                         }
                     }
@@ -533,10 +530,10 @@ public class EscampeBoard implements Partie1 {
     }
 
 
-    private int getPotentialMove(String player, Coordinate position, TEAM_COLOR playerColor, RegularMove[] potentialMoves, int index3, int i, int j) {
+    private int getPotentialMove(Coordinate position, TEAM_COLOR playerColor, RegularMove[] potentialMoves, int index3, int i, int j) {
         try {if (isInBoard(new Coordinate(position.getX() + i, position.getY() + j))) {
             //test if the move is valid
-            if (isValidMove(new RegularMove(position, new Coordinate(position.getX() + i, position.getY() + j), playerColor), player)) {
+            if (isValidMove(new RegularMove(position, new Coordinate(position.getX() + i, position.getY() + j), playerColor))) {
                 potentialMoves[index3] = new RegularMove(new Coordinate(position.getX(), position.getY()), new Coordinate(position.getX() + i, position.getY() + j), playerColor);
                 index3++;
             }
@@ -545,94 +542,6 @@ public class EscampeBoard implements Partie1 {
         }catch (Exception e){
             return index3;
         }
-
-    }
-
-    public void printBoard() {
-        for (int i = 0; i < BOARD_SIZE; i++) {
-            for (int j = 0; j < BOARD_SIZE; j++) {
-                System.out.print(boardArray[i][j].getValue() + " ");
-            }
-            System.out.println();
-        }
-    }
-
-    public void printBoardWithPion() {
-        System.out.println("    A B C D E F");
-        System.out.println("----------------");
-        for (int i = 0; i < BOARD_SIZE; i++) {
-            System.out.print("0" + (i + 1) + " |");
-
-            for (int j = 0; j < BOARD_SIZE; j++) {
-                Piece currentPiece = boardArray[i][j].getPiece();
-                if (currentPiece != null) {
-                    System.out.print(currentPiece.getPieceType().getStringAccordingToPieceType(currentPiece.getPlayerTeamColor().toString()) + " ");
-                } else {
-                    System.out.print("- ");
-                }
-            }
-            System.out.println();
-        }
-    }
-
-    public void printPossibleMoves(RegularMove[] moves) {
-        //get the number of non-null moves
-        int count = 0;
-        for (RegularMove move : moves) {
-            if (move != null) {
-                count++;
-            }
-        }
-
-        System.out.println("number of movements possibles : " + count);
-        System.out.println("    A B C D E F");
-        System.out.println("----------------");
-        for (int i = 0; i < BOARD_SIZE; i++) {
-            System.out.print("0" + (i + 1) + " |");
-
-            for (int j = 0; j < BOARD_SIZE; j++) {
-
-
-                boolean isPossible = false;
-                for (RegularMove move : moves) {
-                    if (move != null) {
-                        if (move.getEndCoordinate().equals(new Coordinate(j, i))){
-
-
-                            isPossible = true;
-                            break;
-                        }
-                    }
-                }
-
-                Piece currentPiece = boardArray[i][j].getPiece();
-
-                if (currentPiece != null) {
-
-                    if(isPossible) {
-                        //test if the pion is a licorne
-                        if (currentPiece.getPieceType() == PIECE_TYPE.LICORNE) {
-                            System.out.print("X ");
-                        } else {
-                            System.out.print("E ");
-                        }
-                    } else {
-                        System.out.print(currentPiece.getPieceType().getStringAccordingToPieceType(currentPiece.getPlayerTeamColor().toString()) + " ");
-                    }
-
-
-                } else {
-                    if(isPossible) {
-                        System.out.print("O ");
-                    }else {
-                        System.out.print("- ");
-                    }
-
-                }
-            }
-            System.out.println();
-        }
-
     }
 
     public String boardToString() {
@@ -641,7 +550,7 @@ public class EscampeBoard implements Partie1 {
             for (int j = 0; j < BOARD_SIZE; j++) {
                 Piece currentPiece = boardArray[i][j].getPiece();
                 if (currentPiece != null) {
-                    res.append(currentPiece.getPieceType().getStringAccordingToPieceType(currentPiece.getPlayerTeamColor().toString()));
+                    res.append(Printinator.getPieceCharacter(currentPiece.getPieceType(), currentPiece.getPlayerTeamColor()));
                 } else {
                     res.append("-");
                 }
@@ -650,11 +559,12 @@ public class EscampeBoard implements Partie1 {
         return res.toString();
     }
 
-    //PRIVATE CONSTANTS
-    private static final int BOARD_SIZE = 6;
+    //GETTERS
+    public Case[][] getBoardArray() {
+        return boardArray;
+    }
 
-
-    //add main
+    //PUBLIC STATIC MAIN
     public static void main(String[] args) {
 
         //TODO make a test for the class
@@ -667,9 +577,12 @@ public class EscampeBoard implements Partie1 {
 
         escampeBoard.setFromFile("src/demo1_board.txt");
 
+        //Debugging prints
+        Printinator.printLineSpace();
+        Printinator.printBoard(escampeBoard.getBoardArray(), "Board after load file :");
        //tes possible move for black in F5
-        RegularMove[] movesB2 = escampeBoard.possibleMovesPaw("blanc",new Coordinate("B2"));
-        escampeBoard.printPossibleMoves(movesB2);
+        RegularMove[] movesB2 = escampeBoard.possibleMovesPaw(TEAM_COLOR.WHITE_TEAM,new Coordinate("B2"));
+        Printinator.printPossibleMoves(movesB2, escampeBoard.getBoardArray(), "Possible moves : ");
         System.out.println("possible moves :");
 
         for(RegularMove move : movesB2){
@@ -706,40 +619,29 @@ public class EscampeBoard implements Partie1 {
 
         //then print the possible move for each piece
         for (Coordinate coordinate : blackPiece) {
-            RegularMove[]  moves = escampeBoard.possibleMovesPaw("noir", coordinate);
-            System.out.println("possible moves for "+coordinate);
-            escampeBoard.printPossibleMoves(moves);
+            RegularMove[]  moves = escampeBoard.possibleMovesPaw(TEAM_COLOR.BLACK_TEAM, coordinate);
+            Printinator.printPossibleMoves(moves, escampeBoard.getBoardArray(), "Possible moves for " + coordinate);
         }
         for (Coordinate coordinate : whitePiece) {
-            System.out.println("possible moves for "+coordinate);
-            RegularMove[] moves = escampeBoard.possibleMovesPaw("blanc", coordinate);
-            escampeBoard.printPossibleMoves(moves);
+            RegularMove[] moves = escampeBoard.possibleMovesPaw(TEAM_COLOR.WHITE_TEAM, coordinate);
+            Printinator.printPossibleMoves(moves, escampeBoard.getBoardArray(), "Possible moves for "+coordinate);
         }
 
-
-
-
-
-        System.out.println("possible moves :");
-        String[] moves = escampeBoard.possiblesMoves("noir");
-        System.out.println("possible moves black:");
-
-        for (String move : moves) {
-            System.out.println(move);
+        String[] moves = escampeBoard.possiblesMoves(TEAM_COLOR.BLACK_TEAM_STRING);
+        RegularMove[] regularMoves = new RegularMove[moves.length];
+        for (int i = 0; i < moves.length; i++) {
+            regularMoves[i] = new RegularMove(moves[i], TEAM_COLOR.BLACK_TEAM);
         }
 
+        Printinator.printListOfPossibleMoves(regularMoves,"Possible moves black : ");
 
-        String[] moves2 = escampeBoard.possiblesMoves("blanc");
-        System.out.println("possible moves white:");
+        escampeBoard.play("B5-A5", TEAM_COLOR.BLACK_TEAM_STRING);
+        Printinator.printBoardWithPion(escampeBoard.getBoardArray(), null);
 
-        for (String move : moves2) {
-            System.out.println(move);
-        }
-
-
-
-        escampeBoard.play("B5-A5","noir");
-        escampeBoard.printBoardWithPion();
+        //Ceci est un commentaire fait à la toute fin du merge
 
     }
+
+    //PRIVATE CONSTANTS
+    private static final int BOARD_SIZE = 6;
 }
