@@ -111,7 +111,7 @@ public class JoueurAleatoire implements IJoueur {
         }
 
          int randomIndex = (int) (Math.random() * moveArray.length);
-         if(!moveArray[randomIndex].equals("e")) {
+         if(!moveArray[randomIndex].equals("E")) {
              board.play(moveArray[randomIndex], TEAM_COLOR.getTeamColorStringFromTeamColor(playerColor));
          }
          return moveArray[randomIndex];
@@ -130,7 +130,7 @@ public class JoueurAleatoire implements IJoueur {
     @Override
     public void mouvementEnnemi(String coup) {
         TEAM_COLOR ennemiColor = TEAM_COLOR.getOppositeTeamColor(playerColor);
-        if(!coup.equals("e")) {
+        if(!coup.equals("E")) {
             board.play(coup, TEAM_COLOR.getTeamColorStringFromTeamColor(ennemiColor));
         }
     }

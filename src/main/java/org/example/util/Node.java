@@ -102,7 +102,7 @@ public class Node {
                 return child.getMove();
             }
         }
-        return "e";
+        return "E";
     }
 
     public EscampeBoard getBoard() {
