@@ -4,6 +4,8 @@ import org.example.enums.TEAM_COLOR;
 import org.example.move.Move;
 import org.example.move.RegularMove;
 
+import java.util.ArrayList;
+
 public class JoueurAleatoire implements IJoueur {
 
     //PRIVATE ATTRIBUTES
@@ -37,7 +39,59 @@ public class JoueurAleatoire implements IJoueur {
 
     @Override
     public String choixMouvement() {
-         String[] moveArray = board.possiblesMoves(TEAM_COLOR.getTeamColorStringFromTeamColor(playerColor));
+        System.out.println(board.playedCoups());
+        if(board.playedCoups() == 0){
+            ArrayList<String> availablesCases = new ArrayList<>();
+            String move = "";
+            availablesCases.add("A1");
+            availablesCases.add("B1");
+            availablesCases.add("C1");
+            availablesCases.add("D1");
+            availablesCases.add("E1");
+            availablesCases.add("F1");
+            availablesCases.add("A2");
+            availablesCases.add("B2");
+            availablesCases.add("C2");
+            availablesCases.add("D2");
+            availablesCases.add("E2");
+            availablesCases.add("F2");
+            for (int i = 0; i<6 ; i++){
+                int place = (int) (Math.random() * availablesCases.size());
+                move = move + availablesCases.get(place);
+                availablesCases.remove(place);
+                if(i != 5){
+                    move = move + "/";
+                }
+            }
+            board.play(move, TEAM_COLOR.getTeamColorStringFromTeamColor(playerColor));
+            return move;
+        } else if (board.playedCoups() == 1) {
+            ArrayList<String> availablesCases = new ArrayList<>();
+            String move = "";
+            availablesCases.add("A5");
+            availablesCases.add("B5");
+            availablesCases.add("C5");
+            availablesCases.add("D5");
+            availablesCases.add("E5");
+            availablesCases.add("F5");
+            availablesCases.add("A6");
+            availablesCases.add("B6");
+            availablesCases.add("C6");
+            availablesCases.add("D6");
+            availablesCases.add("E6");
+            availablesCases.add("F6");
+            for (int i = 0; i<6 ; i++){
+                int place = (int) (Math.random() * availablesCases.size());
+                move = move + availablesCases.get(place);
+                availablesCases.remove(place);
+                if(i != 5){
+                    move = move + "/";
+                }
+            }
+            board.play(move, TEAM_COLOR.getTeamColorStringFromTeamColor(playerColor));
+            return move;
+        }
+        String[] moveArray = board.possiblesMoves(TEAM_COLOR.getTeamColorStringFromTeamColor(playerColor));
          int randomIndex = (int) (Math.random() * moveArray.length);
          board.play(moveArray[randomIndex], TEAM_COLOR.getTeamColorStringFromTeamColor(playerColor));
          return moveArray[randomIndex];
@@ -55,6 +109,7 @@ public class JoueurAleatoire implements IJoueur {
 
     @Override
     public void mouvementEnnemi(String coup) {
+        System.out.println("Coup ennemi : " + coup);
         TEAM_COLOR ennemiColor = TEAM_COLOR.getOppositeTeamColor(playerColor);
         board.play(coup, TEAM_COLOR.getTeamColorStringFromTeamColor(ennemiColor));
     }

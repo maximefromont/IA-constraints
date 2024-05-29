@@ -226,7 +226,7 @@ public class EscampeBoard implements Partie1 {
     }
 
     public boolean isFree(Coordinate coordinate) {
-        return isInBoard(coordinate) && boardArray[coordinate.getY()][coordinate.getX()].getPiece() == null;
+        return boardArray[coordinate.getY()][coordinate.getX()].getPiece() == null;
     }
 
     public boolean isInBoard(Coordinate coordinate) {
@@ -442,8 +442,6 @@ public class EscampeBoard implements Partie1 {
                     } else {
                         return false;
                     }
-
-
                 }
                 break;
 
@@ -492,7 +490,6 @@ public class EscampeBoard implements Partie1 {
                                 }
                             }
                         }
-
                     }
 
                 }
@@ -618,11 +615,62 @@ public class EscampeBoard implements Partie1 {
         Printinator.printPossibleMoves(movesB2, escampeBoard.getBoardArray(), "Possible moves : ");
         System.out.println("possible moves :");
 
+        for(RegularMove move : movesB2){
+            if(move != null){
+                System.out.println(move+" move : x="+move.getMove().getX()+" y="+move.getMove().getY());
+            }
+        }
 
+
+//       //get in an array all the coordinate of black piece and in other all coordinate pf whit piece
+//
+        ArrayList<Coordinate> blackPiece = new ArrayList<>();
+        ArrayList<Coordinate> whitePiece = new ArrayList<>();
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            for (int j = 0; j < BOARD_SIZE; j++) {
+                Piece currentPiece = escampeBoard.boardArray[i][j].getPiece();
+                if (currentPiece != null) {
+                    if (currentPiece.getPlayerTeamColor() == TEAM_COLOR.BLACK_TEAM) {
+                        blackPiece.add(new Coordinate(j, i));
+                    } else {
+                        whitePiece.add(new Coordinate(j, i));
+                    }
+                }
+            }
+        }
+        System.out.println("black piece :");
+        for (Coordinate coordinate : blackPiece) {
+            System.out.println(coordinate);
+        }
+        System.out.println("white piece :");
+        for (Coordinate coordinate : whitePiece) {
+            System.out.println(coordinate);
+        }
+
+        //then print the possible move for each piece
+        for (Coordinate coordinate : blackPiece) {
+            RegularMove[]  moves = escampeBoard.possibleMovesPaw(TEAM_COLOR.BLACK_TEAM, coordinate);
+            Printinator.printPossibleMoves(moves, escampeBoard.getBoardArray(), "Possible moves for " + coordinate);
+        }
+        for (Coordinate coordinate : whitePiece) {
+            RegularMove[] moves = escampeBoard.possibleMovesPaw(TEAM_COLOR.WHITE_TEAM, coordinate);
+            Printinator.printPossibleMoves(moves, escampeBoard.getBoardArray(), "Possible moves for "+coordinate);
+        }
+
+        String[] moves = escampeBoard.possiblesMoves(TEAM_COLOR.BLACK_TEAM_STRING);
+        RegularMove[] regularMoves = new RegularMove[moves.length];
+        for (int i = 0; i < moves.length; i++) {
+            regularMoves[i] = new RegularMove(moves[i], TEAM_COLOR.BLACK_TEAM);
+        }
+
+        Printinator.printListOfPossibleMoves(regularMoves,"Possible moves black : ");
+
+        escampeBoard.play("B5-A5", TEAM_COLOR.BLACK_TEAM_STRING);
+        Printinator.printBoardWithPion(escampeBoard.getBoardArray(), null);
+
+        //Ceci est un commentaire fait à la toute fin du merge
 
     }
-
-
 
     //PRIVATE CONSTANTS
     private static final int BOARD_SIZE = 6;
