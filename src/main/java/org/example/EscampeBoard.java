@@ -7,7 +7,6 @@ import org.example.move.RegularMove;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.swing.text.Position;
 import java.io.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -628,7 +627,7 @@ public class EscampeBoard implements Partie1 {
             Printinator.printPossibleMoves(moves, escampeBoard.getBoardArray(), "Possible moves for "+coordinate);
         }
 
-        String[] moves = escampeBoard.possiblesMoves(TEAM_COLOR.BLACK_TEAM_LOWERCASE);
+        String[] moves = escampeBoard.possiblesMoves(TEAM_COLOR.BLACK_TEAM_STRING);
         RegularMove[] regularMoves = new RegularMove[moves.length];
         for (int i = 0; i < moves.length; i++) {
             regularMoves[i] = new RegularMove(moves[i], TEAM_COLOR.BLACK_TEAM);
@@ -636,7 +635,7 @@ public class EscampeBoard implements Partie1 {
 
         Printinator.printListOfPossibleMoves(regularMoves,"Possible moves black : ");
 
-        escampeBoard.play("B5-A5", TEAM_COLOR.BLACK_TEAM_LOWERCASE);
+        escampeBoard.play("B5-A5", TEAM_COLOR.BLACK_TEAM_STRING);
         Printinator.printBoardWithPion(escampeBoard.getBoardArray(), null);
 
         //Ceci est un commentaire fait à la toute fin du merge
