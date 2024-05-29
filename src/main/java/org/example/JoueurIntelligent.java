@@ -67,9 +67,10 @@ public class JoueurIntelligent implements IJoueur {
             board.play(upperStart, TEAM_COLOR.getTeamColorStringFromTeamColor(playerColor));
             return upperStart;
         }
-        // get best move
-        board.play(moveArray[randomIndex], TEAM_COLOR.getTeamColorStringFromTeamColor(playerColor));
-        return moveArray[randomIndex];
+        // TODO: get best move
+        String move;
+        board.play(move, TEAM_COLOR.getTeamColorStringFromTeamColor(playerColor));
+        return move;
     }
 
     @Override
