@@ -145,7 +145,7 @@ public class EscampeBoard implements Partie1 {
         for (Coordinate coordinate : pawnsCoordinates) {
             RegularMove[] moves = possibleMovesPaw(TEAM_COLOR.getTeamColorFromString(player), coordinate);
             for (RegularMove move : moves) {
-                if (move != null) {
+                if (move != null && (lastLisere == -1 || lastLisere == boardArray[move.getStartCoordinate().getY()][move.getStartCoordinate().getX()].getValue())) {
                     possibleMoves.add(move);
                 }
             }
@@ -189,6 +189,7 @@ public class EscampeBoard implements Partie1 {
 
                 //update the last lisere
                 lastLisere = boardArray[endCoordinate.getY()][endCoordinate.getX()].getValue();
+                Printinator.printCurrentLisere(lastLisere);
 
                 //add the move to the move list
                 this.move.add(regularMove);

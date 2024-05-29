@@ -102,6 +102,14 @@ public class JoueurAleatoire implements IJoueur {
             return move;
         }
         String[] moveArray = board.possiblesMoves(TEAM_COLOR.getTeamColorStringFromTeamColor(playerColor));
+        //if possible moves is empty, or null return e
+        if (moveArray == null || moveArray.length == 0) {
+            return "E";
+        }else if(moveArray.length == 1) {
+            board.play(moveArray[0], TEAM_COLOR.getTeamColorStringFromTeamColor(playerColor));
+            return moveArray[0];
+        }
+
          int randomIndex = (int) (Math.random() * moveArray.length);
          board.play(moveArray[randomIndex], TEAM_COLOR.getTeamColorStringFromTeamColor(playerColor));
          return moveArray[randomIndex];
