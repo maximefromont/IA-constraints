@@ -118,7 +118,7 @@ public class EscampeBoard implements Partie1 {
 
     @Override
     public boolean isValidMove(String move, String player) {
-            if (move.length() == 2) {
+            if (move.length() == 5) {
                 return isValidMove(new RegularMove(move, TEAM_COLOR.getTeamColorFromString(player)));
             }
             return true;
@@ -278,7 +278,7 @@ public class EscampeBoard implements Partie1 {
                     return false;
                 }
                 else if(regularMove.getMove().equals(new Coordinate(0,3))){
-                    //System.out.println("test B2");
+                    System.out.println("test B2");
                     return (this.isFree(new Coordinate(regularMove.getStartCoordinate().getX(),regularMove.getStartCoordinate().getY()+1)) &&
                             this.isFree(new Coordinate(regularMove.getStartCoordinate().getX(),regularMove.getStartCoordinate().getY()+2)));
                 } else if (regularMove.getMove().equals(new Coordinate(0,-3))) {
@@ -419,7 +419,7 @@ public class EscampeBoard implements Partie1 {
                 } else if (move.getTeamColor().equals(TEAM_COLOR.WHITE_TEAM)) {
                     //chekc if the first this.move is a positionmove
                     if (playedCoups() == 0) {
-                        return false;
+                        return true;
                     } else if (this.move.getFirst() instanceof PositionMove) {
                         Coordinate firstMoveCoordinate = ((PositionMove) this.move.getFirst()).getCoordinates()[0];
                         for (int i = 0; i < 6; i++) {
