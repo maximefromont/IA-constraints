@@ -145,7 +145,7 @@ public class EscampeBoard implements Partie1 {
         for (Coordinate coordinate : pawnsCoordinates) {
             RegularMove[] moves = possibleMovesPaw(TEAM_COLOR.getTeamColorFromString(player), coordinate);
             for (RegularMove move : moves) {
-                if (move != null) {
+                if (move != null && (lastLisere == -1 || lastLisere == boardArray[move.getStartCoordinate().getY()][move.getStartCoordinate().getX()].getValue())) {
                     possibleMoves.add(move);
                 }
             }
@@ -189,6 +189,7 @@ public class EscampeBoard implements Partie1 {
 
                 //update the last lisere
                 lastLisere = boardArray[endCoordinate.getY()][endCoordinate.getX()].getValue();
+                Printinator.printCurrentLisere(lastLisere);
 
                 //add the move to the move list
                 this.move.add(regularMove);
@@ -502,7 +503,7 @@ public class EscampeBoard implements Partie1 {
                     }
                     return potentialMoves;
                 case 3:
-                    potentialMoves = new RegularMove[26];
+                    potentialMoves = new RegularMove[16];
                     int index3 = 0;
                     for (int i = -3; i <= 3; i++) {
                         for (int j = -3; j <= 3; j++) {
@@ -531,6 +532,11 @@ public class EscampeBoard implements Partie1 {
     private int getPotentialMove(Coordinate position, TEAM_COLOR playerColor, RegularMove[] potentialMoves, int index3, int i, int j) {
         try {if (isInBoard(new Coordinate(position.getX() + i, position.getY() + j))) {
             //test if the move is valid
+            //test if the end case is free
+            if(!isFree(new Coordinate(position.getX() + i, position.getY() + j))){
+                return index3;
+            }
+
             if (isValidMove(new RegularMove(position, new Coordinate(position.getX() + i, position.getY() + j), playerColor))) {
                 potentialMoves[index3] = new RegularMove(new Coordinate(position.getX(), position.getY()), new Coordinate(position.getX() + i, position.getY() + j), playerColor);
                 index3++;

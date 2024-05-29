@@ -102,8 +102,18 @@ public class JoueurAleatoire implements IJoueur {
             return move;
         }
         String[] moveArray = board.possiblesMoves(TEAM_COLOR.getTeamColorStringFromTeamColor(playerColor));
+        //if possible moves is empty, or null return e
+        if (moveArray == null || moveArray.length == 0) {
+            return "E";
+        }else if(moveArray.length == 1) {
+            board.play(moveArray[0], TEAM_COLOR.getTeamColorStringFromTeamColor(playerColor));
+            return moveArray[0];
+        }
+
          int randomIndex = (int) (Math.random() * moveArray.length);
-         board.play(moveArray[randomIndex], TEAM_COLOR.getTeamColorStringFromTeamColor(playerColor));
+         if(!moveArray[randomIndex].equals("E")) {
+             board.play(moveArray[randomIndex], TEAM_COLOR.getTeamColorStringFromTeamColor(playerColor));
+         }
          return moveArray[randomIndex];
     }
 
@@ -119,9 +129,10 @@ public class JoueurAleatoire implements IJoueur {
 
     @Override
     public void mouvementEnnemi(String coup) {
-        System.out.println("Coup ennemi : " + coup);
         TEAM_COLOR ennemiColor = TEAM_COLOR.getOppositeTeamColor(playerColor);
-        board.play(coup, TEAM_COLOR.getTeamColorStringFromTeamColor(ennemiColor));
+        if(!coup.equals("E")) {
+            board.play(coup, TEAM_COLOR.getTeamColorStringFromTeamColor(ennemiColor));
+        }
     }
 
     @Override

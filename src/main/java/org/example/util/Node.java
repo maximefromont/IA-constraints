@@ -34,7 +34,7 @@ public class Node {
             // this should be allowed moves within the max depth
             //display possible moves
             if(board.possiblesMoves(player).length == 0){
-                children.add(new Node("e", depth+1, maxDepth, board, friend));
+                children.add(new Node("E", depth+1, maxDepth, board, friend));
             }else {
                 for (String nodeMove : board.possiblesMoves(player)) {
                     //decalre childre as arraylist
@@ -102,7 +102,7 @@ public class Node {
                 return child.getMove();
             }
         }
-        return "e";
+        return "E";
     }
 
     public EscampeBoard getBoard() {
