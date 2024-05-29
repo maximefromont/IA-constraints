@@ -109,6 +109,7 @@ public class JoueurAleatoire implements IJoueur {
 
     @Override
     public void mouvementEnnemi(String coup) {
+        System.out.println("Coup ennemi : " + coup);
         TEAM_COLOR ennemiColor = TEAM_COLOR.getOppositeTeamColor(playerColor);
         board.play(coup, TEAM_COLOR.getTeamColorStringFromTeamColor(ennemiColor));
     }

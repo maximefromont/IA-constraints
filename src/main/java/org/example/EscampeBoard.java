@@ -207,7 +207,9 @@ public class EscampeBoard implements Partie1 {
                     boardArray[coordinates[i].getY()][coordinates[i].getX()].setPiece(new Piece(PIECE_TYPE.PALADIN, player.equals("blanc") ? TEAM_COLOR.WHITE_TEAM : TEAM_COLOR.BLACK_TEAM));
                 }
                 boardArray[coordinates[5].getY()][coordinates[5].getX()].setPiece(new Piece(PIECE_TYPE.LICORNE, player.equals("blanc") ? TEAM_COLOR.WHITE_TEAM : TEAM_COLOR.BLACK_TEAM));
-
+                this.move.add(positionMove);
+            } else {
+                System.out.println("Invalid move");
             }
         }
     }
@@ -395,6 +397,7 @@ public class EscampeBoard implements Partie1 {
                 for (int i = 0; i < 6; i++) {
                     for (int j = i + 1; j < 6; j++) {
                         if (((PositionMove) move).getCoordinates()[i].equals(((PositionMove) move).getCoordinates()[j])) {
+                            System.out.println("Les coordonnées ne peuvent pas être identiques :" + ((PositionMove) move).getCoordinates()[i] +" et "+((PositionMove) move).getCoordinates()[j]);
                             return false;
                         }
                     }
@@ -403,40 +406,45 @@ public class EscampeBoard implements Partie1 {
                 if (move.getTeamColor().equals(TEAM_COLOR.BLACK_TEAM)) {
 
                     //check if the coordinates are in the right place
-                    if (((PositionMove) move).getCoordinates()[0].getX() < 2) {
+                    if (((PositionMove) move).getCoordinates()[0].getY() < 2) {
                         for (int i = 0; i < 6; i++) {
-                            if (((PositionMove) move).getCoordinates()[i].getX() >= 2) {
+                            if (((PositionMove) move).getCoordinates()[i].getY() >= 2) {
+                                System.out.println("Le coup "+((PositionMove) move).getCoordinates()[i]+" n'est pas valide pour le joueur noir");
                                 return false;
                             }
                         }
                     } else {
                         for (int i = 0; i < 6; i++) {
-                            if (((PositionMove) move).getCoordinates()[i].getX() <= 3) {
+                            if (((PositionMove) move).getCoordinates()[i].getY() <= 3) {
+                                System.out.println("Le coup "+((PositionMove) move).getCoordinates()[i]+" n'est pas valide pour le joueur noir");
                                 return false;
                             }
                         }
                     }
-
+                    return true;
 
                 } else if (move.getTeamColor().equals(TEAM_COLOR.WHITE_TEAM)) {
                     //chekc if the first this.move is a positionmove
                     if (playedCoups() == 0) {
-                        return true;
+                        return false;
                     } else if (this.move.getFirst() instanceof PositionMove) {
                         Coordinate firstMoveCoordinate = ((PositionMove) this.move.getFirst()).getCoordinates()[0];
                         for (int i = 0; i < 6; i++) {
-                            if (firstMoveCoordinate.getX() < 2) {
-                                if (((PositionMove) move).getCoordinates()[i].getX() > 3) {
+                            if (firstMoveCoordinate.getY() <= 2) {
+                                if (((PositionMove) move).getCoordinates()[i].getY() <= 2) {
+                                    System.out.println("Le coup "+((PositionMove) move).getCoordinates()[i]+" n'est pas valide pour le joueur blanc avec le premier coup "+firstMoveCoordinate.getY());
                                     return false;
                                 }
                             } else {
-                                if (((PositionMove) move).getCoordinates()[i].getX() < 2) {
+                                if (((PositionMove) move).getCoordinates()[i].getY() > 2) {
+                                    System.out.println("Le coup "+((PositionMove) move).getCoordinates()[i]+" n'est pas valide pour le joueur blanc avec le premier coup "+firstMoveCoordinate);
                                     return false;
                                 }
                             }
                         }
-
+                        return true;
                     } else {
+                        System.out.println("Le premier coup doit être un position move");
                         return false;
                     }
                 }
