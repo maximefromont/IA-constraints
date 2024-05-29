@@ -17,10 +17,8 @@ public class Node {
     private final EscampeBoard board;
 
     public Node(String move, int depth, int maxDepth, EscampeBoard board, String friend) {
-        Printinator.printBoardWithPion(board.getBoardArray(), null);
-        System.out.println("Move : " + move);
-        this.ennemy = friend.equals("blanc") ? "noir" : "blanc";
 
+        this.ennemy = friend.equals("blanc") ? "noir" : "blanc";
         if (depth%2 == 0) {
             this.player = friend;
         }else {
@@ -29,26 +27,39 @@ public class Node {
 
         this.friend = friend;
         this.children = new ArrayList<Node>();
-        if(depth < maxDepth) {
-            // this should be allowed moves within the max depth
-            if(board.possiblesMoves(player).length == 0){
-                children.add(new Node("e", depth+1, maxDepth, board, friend));
-            }
-            for(String nodeMove : board.possiblesMoves(player)){
-                //decalre childre as arraylist
-                EscampeBoard tempBoard = board;
-                tempBoard.play(nodeMove, player);
-                children.add(new Node(nodeMove, depth+1, maxDepth, tempBoard, friend));
-            }
-            values = value(children, player);
-        } else {
-            // this should be the heuristic value
-            values = Heuristics.mobilityHeuristic(board, player);
-        }
-
         this.move = move;
         this.depth = depth;
         this.board = board;
+        if(depth < maxDepth && !board.gameOver()) {
+            // this should be allowed moves within the max depth
+            //display possible moves
+            if(board.possiblesMoves(player).length == 0){
+                children.add(new Node("e", depth+1, maxDepth, board, friend));
+            }else {
+                for (String nodeMove : board.possiblesMoves(player)) {
+                    //decalre childre as arraylist
+                    EscampeBoard tempBoard = board.clone();
+                    tempBoard.play(nodeMove, player);
+                    children.add(new Node(nodeMove, depth + 1, maxDepth, tempBoard, friend));
+                }
+            }
+            values = value(children, player);
+        } else {
+
+            values = Heuristics.directWinHeuristic(this, friend) + Heuristics.mobilityHeuristic(board, friend);
+        }
+
+        // Printinator.printBoardWithPion(board.getBoardArray(), null);
+        if (depth == 1) {
+            System.out.print("Move : " + move);
+            System.out.print(" node created  ");
+            //print number of coup played in the board
+            System.out.print("Depth : " + depth);
+            System.out.print(" Nombre de coup  : " + this.board.playedCoups());
+            System.out.println(" Value : " + values);
+        }
+
+
     }
 
     private int value (ArrayList<Node> childrens, String player){
@@ -94,6 +105,11 @@ public class Node {
         return "e";
     }
 
+    public EscampeBoard getBoard() {
+        return board;
+    }
+
+
 
 
     //create a  main method
@@ -105,7 +121,6 @@ public class Node {
         escampeBoard.setFromFile("src/demo1_board.txt");
         Printinator.printBoardWithPion(escampeBoard.getBoardArray(), null);
         Node node = new Node("e", 0, 5, escampeBoard, "noir");
-
         System.out.println(node.getBestMove());
     }
 }

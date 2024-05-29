@@ -22,7 +22,6 @@ public class EscampeBoard implements Partie1 {
 
     //PRIVATE ATTRIBUTES
     private final ArrayList<Move> move = new ArrayList<>();
-
     private Case[][] boardArray;
     private int lastLisere = -1;
     private boolean BlackTeamWin =  false;
@@ -89,13 +88,10 @@ public class EscampeBoard implements Partie1 {
 
         if (!file.exists()) {
             try {
-                if (file.createNewFile()) {
-                    Printinator.printFileCreationMessage(fileName, true);
-                } else {
-                    Printinator.printFileCreationMessage(fileName, false);
-                }
+                Printinator.printFileCreationMessage(fileName, file.createNewFile());
             } catch (IOException e) {
-                e.printStackTrace();
+                System.out.println("An error occurred.");
+                Logger.getLogger(EscampeBoard.class.getName()).log(Level.SEVERE, "An error occurred.", e);
             }
         }
 
@@ -117,14 +113,18 @@ public class EscampeBoard implements Partie1 {
         } catch (IOException e) {
             Logger.getLogger(EscampeBoard.class.getName()).log(Level.SEVERE, "An error occurred.", e);
         }
+
+
+
     }
 
     @Override
     public boolean isValidMove(String move, String player) {
-            if (move.length() == 2) {
+            if (move.length() == 5) {
                 return isValidMove(new RegularMove(move, TEAM_COLOR.getTeamColorFromString(player)));
             }
             return true;
+
     }
 
     @Override
@@ -217,6 +217,8 @@ public class EscampeBoard implements Partie1 {
         return BlackTeamWin || WhiteTeamWin;
     }
 
+
+
     //////////////////////////////////////////////////////////PERSONAL FUNCTION/////////////////////////////////////////////////////
     public int  playedCoups(){
         return move.size();
@@ -280,7 +282,7 @@ public class EscampeBoard implements Partie1 {
                     return false;
                 }
                 else if(regularMove.getMove().equals(new Coordinate(0,3))){
-                    System.out.println("test B2");
+                   // System.out.println("test B2");
                     return (this.isFree(new Coordinate(regularMove.getStartCoordinate().getX(),regularMove.getStartCoordinate().getY()+1)) &&
                             this.isFree(new Coordinate(regularMove.getStartCoordinate().getX(),regularMove.getStartCoordinate().getY()+2)));
                 } else if (regularMove.getMove().equals(new Coordinate(0,-3))) {
@@ -439,6 +441,8 @@ public class EscampeBoard implements Partie1 {
                     } else {
                         return false;
                     }
+
+
                 }
                 break;
 
@@ -487,6 +491,7 @@ public class EscampeBoard implements Partie1 {
                                 }
                             }
                         }
+
                     }
 
                 }
@@ -576,6 +581,12 @@ public class EscampeBoard implements Partie1 {
         Printinator.printBoardWithPion(escampeBoard.getBoardArray(), null);
 
         escampeBoard.setFromFile("src/demo1_board.txt");
+        Printinator.printBoardWithPion(escampeBoard.getBoardArray(), null);
+
+        escampeBoard.play("B5-A5", "noir");
+        Printinator.printBoardWithPion(escampeBoard.getBoardArray(), null);
+        //test if the game is over
+        System.out.println(escampeBoard.gameOver());
 
         //Debugging prints
         Printinator.printLineSpace();
@@ -585,61 +596,24 @@ public class EscampeBoard implements Partie1 {
         Printinator.printPossibleMoves(movesB2, escampeBoard.getBoardArray(), "Possible moves : ");
         System.out.println("possible moves :");
 
-        for(RegularMove move : movesB2){
-            if(move != null){
-                System.out.println(move+" move : x="+move.getMove().getX()+" y="+move.getMove().getY());
-            }
-        }
 
 
-//       //get in an array all the coordinate of black piece and in other all coordinate pf whit piece
-//
-        ArrayList<Coordinate> blackPiece = new ArrayList<>();
-        ArrayList<Coordinate> whitePiece = new ArrayList<>();
-        for (int i = 0; i < BOARD_SIZE; i++) {
-            for (int j = 0; j < BOARD_SIZE; j++) {
-                Piece currentPiece = escampeBoard.boardArray[i][j].getPiece();
-                if (currentPiece != null) {
-                    if (currentPiece.getPlayerTeamColor() == TEAM_COLOR.BLACK_TEAM) {
-                        blackPiece.add(new Coordinate(j, i));
-                    } else {
-                        whitePiece.add(new Coordinate(j, i));
-                    }
+    }
+
+    @Override
+    public EscampeBoard clone() {
+        try {
+            EscampeBoard cloned = (EscampeBoard) super.clone();
+            cloned.boardArray = new Case[BOARD_SIZE][BOARD_SIZE];
+            for (int i = 0; i < BOARD_SIZE; i++) {
+                for (int j = 0; j < BOARD_SIZE; j++) {
+                    cloned.boardArray[i][j] = this.boardArray[i][j].clone();
                 }
             }
+            return cloned;
+        } catch (CloneNotSupportedException e) {
+            throw new RuntimeException("Clone not supported", e);
         }
-        System.out.println("black piece :");
-        for (Coordinate coordinate : blackPiece) {
-            System.out.println(coordinate);
-        }
-        System.out.println("white piece :");
-        for (Coordinate coordinate : whitePiece) {
-            System.out.println(coordinate);
-        }
-
-        //then print the possible move for each piece
-        for (Coordinate coordinate : blackPiece) {
-            RegularMove[]  moves = escampeBoard.possibleMovesPaw(TEAM_COLOR.BLACK_TEAM, coordinate);
-            Printinator.printPossibleMoves(moves, escampeBoard.getBoardArray(), "Possible moves for " + coordinate);
-        }
-        for (Coordinate coordinate : whitePiece) {
-            RegularMove[] moves = escampeBoard.possibleMovesPaw(TEAM_COLOR.WHITE_TEAM, coordinate);
-            Printinator.printPossibleMoves(moves, escampeBoard.getBoardArray(), "Possible moves for "+coordinate);
-        }
-
-        String[] moves = escampeBoard.possiblesMoves(TEAM_COLOR.BLACK_TEAM_STRING);
-        RegularMove[] regularMoves = new RegularMove[moves.length];
-        for (int i = 0; i < moves.length; i++) {
-            regularMoves[i] = new RegularMove(moves[i], TEAM_COLOR.BLACK_TEAM);
-        }
-
-        Printinator.printListOfPossibleMoves(regularMoves,"Possible moves black : ");
-
-        escampeBoard.play("B5-A5", TEAM_COLOR.BLACK_TEAM_STRING);
-        Printinator.printBoardWithPion(escampeBoard.getBoardArray(), null);
-
-        //Ceci est un commentaire fait à la toute fin du merge
-
     }
 
     //PRIVATE CONSTANTS
