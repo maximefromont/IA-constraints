@@ -278,7 +278,7 @@ public class EscampeBoard implements Partie1 {
                     return false;
                 }
                 else if(regularMove.getMove().equals(new Coordinate(0,3))){
-                    System.out.println("test B2");
+                    //System.out.println("test B2");
                     return (this.isFree(new Coordinate(regularMove.getStartCoordinate().getX(),regularMove.getStartCoordinate().getY()+1)) &&
                             this.isFree(new Coordinate(regularMove.getStartCoordinate().getX(),regularMove.getStartCoordinate().getY()+2)));
                 } else if (regularMove.getMove().equals(new Coordinate(0,-3))) {

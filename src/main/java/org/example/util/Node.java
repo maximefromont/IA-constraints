@@ -95,7 +95,7 @@ public class Node {
         return depth;
     }
 
-    private String getBestMove(){
+    public String getBestMove(){
         //get the move in the children with the same value as the node
         for(Node child : children){
             if(child.getValues() == values){
