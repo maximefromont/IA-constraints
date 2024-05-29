@@ -6,45 +6,20 @@ import org.example.move.PositionMove;
 import org.example.move.RegularMove;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
-public class JoueurAleatoire implements IJoueur {
+public class JoueurIntelligent implements IJoueur {
 
     //PRIVATE ATTRIBUTES
     private TEAM_COLOR playerColor;
     private EscampeBoard board; //This is a reference to the board that is instancied in the main
 
-    private ArrayList<String> upperStart = new ArrayList<>() {{
-        add("A1");
-        add("B1");
-        add("C1");
-        add("D1");
-        add("E1");
-        add("F1");
-        add("A2");
-        add("B2");
-        add("C2");
-        add("D2");
-        add("E2");
-        add("F2");
-    }};
+    private final String upperStart = "C6/B5/C5/D5/E5/F5";
 
-    private ArrayList<String> lowerStart = new ArrayList<>() {{
-        add("A5");
-        add("B5");
-        add("C5");
-        add("D5");
-        add("E5");
-        add("F5");
-        add("A6");
-        add("B6");
-        add("C6");
-        add("D6");
-        add("E6");
-        add("F6");
-    }};
+    private final String lowerStart = "C1/B2/C2/D2/E2/F2";
 
     //CONSTRUCTOR
-    public JoueurAleatoire() {
+    public JoueurIntelligent() {
     }
 
     @Override
@@ -75,7 +50,8 @@ public class JoueurAleatoire implements IJoueur {
             else{
                 // check if all the cases in upperStart are empty
                 goLower = false;
-                for (String s : upperStart){
+                ArrayList<String> upperCases = new ArrayList<>(Arrays.asList("A1", "B1", "C1", "D1", "E1", "F1", "A2", "B2", "C2", "D2", "E2", "F2"));
+                for (String s : upperCases){
                     Coordinate c = new Coordinate(s);
                     if(!board.isFree(c)){
                         System.out.println("upperStart is not free : "+ s);
@@ -84,27 +60,16 @@ public class JoueurAleatoire implements IJoueur {
                     }
                 }
             }
-            ArrayList<String> availablesCases = upperStart;
             if(goLower){
-                availablesCases = lowerStart;
+                board.play(lowerStart, TEAM_COLOR.getTeamColorStringFromTeamColor(playerColor));
+                return lowerStart;
             }
-            String move = "";
-
-            for (int i = 0; i<6 ; i++){
-                int place = (int) (Math.random() * availablesCases.size());
-                move = move + availablesCases.get(place);
-                availablesCases.remove(place);
-                if(i != 5){
-                    move = move + "/";
-                }
-            }
-            board.play(move, TEAM_COLOR.getTeamColorStringFromTeamColor(playerColor));
-            return move;
+            board.play(upperStart, TEAM_COLOR.getTeamColorStringFromTeamColor(playerColor));
+            return upperStart;
         }
-        String[] moveArray = board.possiblesMoves(TEAM_COLOR.getTeamColorStringFromTeamColor(playerColor));
-         int randomIndex = (int) (Math.random() * moveArray.length);
-         board.play(moveArray[randomIndex], TEAM_COLOR.getTeamColorStringFromTeamColor(playerColor));
-         return moveArray[randomIndex];
+        // get best move
+        board.play(moveArray[randomIndex], TEAM_COLOR.getTeamColorStringFromTeamColor(playerColor));
+        return moveArray[randomIndex];
     }
 
     @Override
