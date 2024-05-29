@@ -177,6 +177,9 @@ public class Printinator {
     public static final char POSSIBLE_CAPTURE_IDENTIFIER = 'X';
     public static final char POSSIBLE_EAT_IDENTIFIER = 'E';
 
+    public static final String WHITE_TEAM_BASE_IDENTIFIER = "blanc";
+    public static final String BLACK_TEAM_BASE_IDENTIFIER = "noir";
+
 
 
 
