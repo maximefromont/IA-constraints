@@ -50,7 +50,9 @@ public class JoueurHumain implements IJoueur {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        board.play(move, TEAM_COLOR.getTeamColorStringFromTeamColor(playerColor));
+        if(!move.equals("e")) {
+            board.play(move, TEAM_COLOR.getTeamColorStringFromTeamColor(playerColor));
+        }
         return move;
     }
 
@@ -68,7 +70,9 @@ public class JoueurHumain implements IJoueur {
     public void mouvementEnnemi(String coup) {
         System.out.println("Coup ennemi : " + coup);
         TEAM_COLOR ennemiColor = TEAM_COLOR.getOppositeTeamColor(playerColor);
-        board.play(coup, TEAM_COLOR.getTeamColorStringFromTeamColor(ennemiColor));
+        if(!coup.equals("e")) {
+            board.play(coup, TEAM_COLOR.getTeamColorStringFromTeamColor(ennemiColor));
+        }
     }
 
     @Override

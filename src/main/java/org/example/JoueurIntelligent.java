@@ -70,7 +70,9 @@ public class JoueurIntelligent implements IJoueur {
         }
         Node state = new Node("e", 0, 3, board, TEAM_COLOR.getTeamColorStringFromTeamColor(playerColor));
         String move = state.getBestMove();
-        board.play(move, TEAM_COLOR.getTeamColorStringFromTeamColor(playerColor));
+        if(!move.equals("e")) {
+            board.play(move, TEAM_COLOR.getTeamColorStringFromTeamColor(playerColor));
+        }
         return move;
     }
 
@@ -88,7 +90,9 @@ public class JoueurIntelligent implements IJoueur {
     public void mouvementEnnemi(String coup) {
         System.out.println("Coup ennemi : " + coup);
         TEAM_COLOR ennemiColor = TEAM_COLOR.getOppositeTeamColor(playerColor);
-        board.play(coup, TEAM_COLOR.getTeamColorStringFromTeamColor(ennemiColor));
+        if(!coup.equals("e")) {
+            board.play(coup, TEAM_COLOR.getTeamColorStringFromTeamColor(ennemiColor));
+        }
     }
 
     @Override
