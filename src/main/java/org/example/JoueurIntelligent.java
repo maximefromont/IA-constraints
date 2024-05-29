@@ -4,6 +4,7 @@ import org.example.enums.TEAM_COLOR;
 import org.example.move.Move;
 import org.example.move.PositionMove;
 import org.example.move.RegularMove;
+import org.example.util.Node;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,9 +15,9 @@ public class JoueurIntelligent implements IJoueur {
     private TEAM_COLOR playerColor;
     private EscampeBoard board; //This is a reference to the board that is instancied in the main
 
-    private final String upperStart = "C6/B5/C5/D5/E5/F5";
+    private final String lowerStart = "C6/B5/C5/D5/E5/F5";
 
-    private final String lowerStart = "C1/B2/C2/D2/E2/F2";
+    private final String upperStart = "C1/B2/C2/D2/E2/F2";
 
     //CONSTRUCTOR
     public JoueurIntelligent() {
@@ -67,8 +68,8 @@ public class JoueurIntelligent implements IJoueur {
             board.play(upperStart, TEAM_COLOR.getTeamColorStringFromTeamColor(playerColor));
             return upperStart;
         }
-        // TODO: get best move
-        String move;
+        Node state = new Node("e", 0, 3, board, TEAM_COLOR.getTeamColorStringFromTeamColor(playerColor));
+        String move = state.getBestMove();
         board.play(move, TEAM_COLOR.getTeamColorStringFromTeamColor(playerColor));
         return move;
     }
@@ -92,6 +93,6 @@ public class JoueurIntelligent implements IJoueur {
 
     @Override
     public String binoName() {
-        return "Golmonisator" + " - " + Math.random() * 1000;
+        return "Intello" + " - " + Math.random() * 1000;
     }
 }

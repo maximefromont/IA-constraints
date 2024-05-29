@@ -22,4 +22,13 @@ public class Case {
     public int getValue() {
         return value;
     }
+
+    //crete clone method
+    public Case clone(){
+        Case newCase = new Case(value);
+        if(piece != null){
+            newCase.setPiece(piece.clone());
+        }
+        return newCase;
+    }
 }
