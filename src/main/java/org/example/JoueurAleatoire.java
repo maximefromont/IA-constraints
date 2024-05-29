@@ -34,7 +34,10 @@ public class JoueurAleatoire implements IJoueur {
 
     @Override
     public String choixMouvement() {
-        return null;
+         String[] moveArray = board.possiblesMoves(TEAM_COLOR.getTeamColorStringFromTeamColor(playerColor));
+         int randomIndex = (int) (Math.random() * moveArray.length);
+         board.play(moveArray[randomIndex], TEAM_COLOR.getTeamColorStringFromTeamColor(playerColor));
+         return moveArray[randomIndex];
     }
 
     @Override
