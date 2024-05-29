@@ -1,0 +1,3 @@
+jar: out/artifacts/app/IA-constraints.jar
+clientClass: org.example.ClientJeu
+mainClass: org.example.JoueurIntellignet
