@@ -15,4 +15,9 @@ public record Piece (PIECE_TYPE pieceType,
         return playerTeamColor;
     }
 
+    //clone method
+    public Piece clone(){
+        return new Piece(pieceType, playerTeamColor);
+    }
+
 }

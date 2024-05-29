@@ -473,8 +473,8 @@ public class EscampeBoard implements Partie1 {
         RegularMove[] potentialMoves;
 
         //Debug prints
-        Printinator.printCurrentLisere(currentLisere);
-        Printinator.printPosition(position);
+//        Printinator.printCurrentLisere(currentLisere);
+//        Printinator.printPosition(position);
 
         switch (currentLisere){
 
@@ -569,6 +569,17 @@ public class EscampeBoard implements Partie1 {
         return boardArray;
     }
 
+    //create a clone of the board
+    public EscampeBoard clone(){
+        EscampeBoard clone = new EscampeBoard();
+        for (int i = 0; i < BOARD_SIZE; i++) {
+            for (int j = 0; j < BOARD_SIZE; j++) {
+                clone.boardArray[i][j] = this.boardArray[i][j].clone();
+            }
+        }
+        return clone;
+    }
+
     //PUBLIC STATIC MAIN
     public static void main(String[] args) {
 
@@ -600,21 +611,7 @@ public class EscampeBoard implements Partie1 {
 
     }
 
-    @Override
-    public EscampeBoard clone() {
-        try {
-            EscampeBoard cloned = (EscampeBoard) super.clone();
-            cloned.boardArray = new Case[BOARD_SIZE][BOARD_SIZE];
-            for (int i = 0; i < BOARD_SIZE; i++) {
-                for (int j = 0; j < BOARD_SIZE; j++) {
-                    cloned.boardArray[i][j] = this.boardArray[i][j].clone();
-                }
-            }
-            return cloned;
-        } catch (CloneNotSupportedException e) {
-            throw new RuntimeException("Clone not supported", e);
-        }
-    }
+
 
     //PRIVATE CONSTANTS
     private static final int BOARD_SIZE = 6;
