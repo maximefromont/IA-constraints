@@ -77,7 +77,7 @@ public class JoueurAleatoire implements IJoueur {
                 goLower = false;
                 for (String s : upperStart){
                     Coordinate c = new Coordinate(s);
-                    if(!board.isFree(c)){
+                    if(!board.isFree(c, playerColor)){
                         System.out.println("upperStart is not free : "+ s);
                         goLower = true;
                         break;

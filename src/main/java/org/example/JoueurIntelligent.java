@@ -54,7 +54,7 @@ public class JoueurIntelligent implements IJoueur {
                 ArrayList<String> upperCases = new ArrayList<>(Arrays.asList("A1", "B1", "C1", "D1", "E1", "F1", "A2", "B2", "C2", "D2", "E2", "F2"));
                 for (String s : upperCases){
                     Coordinate c = new Coordinate(s);
-                    if(!board.isFree(c)){
+                    if(!board.isFree(c, playerColor)){
                         System.out.println("upperStart is not free : "+ s);
                         goLower = true;
                         break;
