@@ -46,7 +46,7 @@ public class Node {
             values = value(children, player);
         } else {
 
-            values = Heuristics.directWinHeuristic(this, friend) + Heuristics.mobilityHeuristic(board, friend);
+            values = Heuristics.HeuristicValue(this, player);
         }
 
         // Printinator.printBoardWithPion(board.getBoardArray(), null);
@@ -109,6 +109,16 @@ public class Node {
         return board;
     }
 
+    //get friend and ennemy
+
+    public String getFriend() {
+        return friend;
+    }
+
+    public String getEnnemy() {
+        return ennemy;
+    }
+
 
 
 
@@ -117,10 +127,9 @@ public class Node {
         EscampeBoard escampeBoard = new EscampeBoard();
         Printinator.printBoard(escampeBoard.getBoardArray(), "Lisere map :");
         Printinator.printLineSpace();
-        Printinator.printBoardWithPion(escampeBoard.getBoardArray(), null);
         escampeBoard.setFromFile("src/demo1_board.txt");
         Printinator.printBoardWithPion(escampeBoard.getBoardArray(), null);
-        Node node = new Node("e", 0, 5, escampeBoard, "noir");
+        Node node = new Node("e", 0, 3, escampeBoard, "noir");
         System.out.println(node.getBestMove());
     }
 }

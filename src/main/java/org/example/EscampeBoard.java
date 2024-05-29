@@ -207,6 +207,7 @@ public class EscampeBoard implements Partie1 {
                     boardArray[coordinates[i].getY()][coordinates[i].getX()].setPiece(new Piece(PIECE_TYPE.PALADIN, player.equals("blanc") ? TEAM_COLOR.WHITE_TEAM : TEAM_COLOR.BLACK_TEAM));
                 }
                 boardArray[coordinates[5].getY()][coordinates[5].getX()].setPiece(new Piece(PIECE_TYPE.LICORNE, player.equals("blanc") ? TEAM_COLOR.WHITE_TEAM : TEAM_COLOR.BLACK_TEAM));
+                this.move.add(positionMove);
 
             }
         }
@@ -460,7 +461,7 @@ public class EscampeBoard implements Partie1 {
         return false; //By default
     }
 
-    //get all the possible moves for a prawn at a given position
+
     public RegularMove[] possibleMovesPaw(TEAM_COLOR playerColor, Coordinate position) {
 
         //test if start position is get a piece of the current player
@@ -567,6 +568,16 @@ public class EscampeBoard implements Partie1 {
     //GETTERS
     public Case[][] getBoardArray() {
         return boardArray;
+    }
+
+    public String getWinner(){
+        if(BlackTeamWin){
+            return "noir";
+        }else if(WhiteTeamWin){
+            return "blanc";
+        }else{
+            return "null";
+        }
     }
 
     //create a clone of the board
