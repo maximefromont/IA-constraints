@@ -50,14 +50,14 @@ public class Node {
         }
 
         // Printinator.printBoardWithPion(board.getBoardArray(), null);
-        if (depth == 1) {
-            System.out.print("Move : " + move);
-            System.out.print(" node created  ");
-            //print number of coup played in the board
-            System.out.print("Depth : " + depth);
-            System.out.print(" Nombre de coup  : " + this.board.playedCoups());
-            System.out.println(" Value : " + values);
-        }
+//        if (depth == 1) {
+//            System.out.print("Move : " + move);
+//            System.out.print(" node created  ");
+//            //print number of coup played in the board
+//            System.out.print("Depth : " + depth);
+//            System.out.print(" Nombre de coup  : " + this.board.playedCoups());
+//            System.out.println(" Value : " + values);
+//        }
 
 
     }

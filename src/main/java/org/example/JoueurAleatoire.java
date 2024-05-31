@@ -107,6 +107,7 @@ public class JoueurAleatoire implements IJoueur {
             return "E";
         }else if(moveArray.length == 1) {
             board.play(moveArray[0], TEAM_COLOR.getTeamColorStringFromTeamColor(playerColor));
+            board.setLastLisere(board.getLisereValue(new Coordinate(moveArray[0].substring(3, 5))));
             return moveArray[0];
         }
 
@@ -132,6 +133,11 @@ public class JoueurAleatoire implements IJoueur {
         TEAM_COLOR ennemiColor = TEAM_COLOR.getOppositeTeamColor(playerColor);
         if(!coup.equals("E")) {
             board.play(coup, TEAM_COLOR.getTeamColorStringFromTeamColor(ennemiColor));
+
+            if (board.playedCoups() >=3 ) {
+                board.setLastLisere(board.getLisereValue(new Coordinate(coup.substring(3, 5))));
+
+            }
         }
     }
 
