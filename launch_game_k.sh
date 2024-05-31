@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Démarrer le serveur de jeu
-(cd ~/Cour/résolution\ de\ contrainte/projet && java -cp escampeobf.jar escampe.ServeurJeu 1234 &)
+(cd ~/Cour/résolution\ de\ contrainte/projet && /usr/lib/jvm/java-19-openjdk-amd64/bin/java -cp escampeobf.jar escampe.ServeurJeu 1234 &)
 
 # Attendre que le serveur soit prêt
 sleep 5
