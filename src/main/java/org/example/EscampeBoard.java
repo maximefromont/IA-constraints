@@ -4,6 +4,8 @@ import org.example.enums.TEAM_COLOR;
 import org.example.move.Move;
 import org.example.move.PositionMove;
 import org.example.move.RegularMove;
+
+import java.util.Objects;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -15,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.StrictMath.abs;
+import static java.lang.StrictMath.decrementExact;
 
 public class EscampeBoard implements Partie1 {
 
@@ -188,8 +191,9 @@ public class EscampeBoard implements Partie1 {
                 boardArray[endCoordinate.getY()][endCoordinate.getX()].setPiece(piece);
 
                 //update the last lisere
-                lastLisere = boardArray[endCoordinate.getY()][endCoordinate.getX()].getValue();
-                Printinator.printCurrentLisere(lastLisere);
+
+                lastLisere = getLisereValue(new Coordinate(move.substring(3, 5)));
+
 
                 //add the move to the move list
                 this.move.add(regularMove);
@@ -201,10 +205,10 @@ public class EscampeBoard implements Partie1 {
                 Coordinate[] coordinates = positionMove.getCoordinates();
 
                 //placer des pions sur les 5 premières cases et une licorne sur la 6ème
-                for (int i = 0; i < 5; i++) {
+                for (int i = 1; i < 6; i++) {
                     boardArray[coordinates[i].getY()][coordinates[i].getX()].setPiece(new Piece(PIECE_TYPE.PALADIN, player.equals("blanc") ? TEAM_COLOR.WHITE_TEAM : TEAM_COLOR.BLACK_TEAM));
                 }
-                boardArray[coordinates[5].getY()][coordinates[5].getX()].setPiece(new Piece(PIECE_TYPE.LICORNE, player.equals("blanc") ? TEAM_COLOR.WHITE_TEAM : TEAM_COLOR.BLACK_TEAM));
+                boardArray[coordinates[0].getY()][coordinates[0].getX()].setPiece(new Piece(PIECE_TYPE.LICORNE, player.equals("blanc") ? TEAM_COLOR.WHITE_TEAM : TEAM_COLOR.BLACK_TEAM));
                 this.move.add(positionMove);
 
             }
@@ -229,6 +233,10 @@ public class EscampeBoard implements Partie1 {
         return coordinate.getX() >= 0 && coordinate.getX() < BOARD_SIZE && coordinate.getY() >= 0 && coordinate.getY() < BOARD_SIZE;
     }
 
+    public int getLisereValue(Coordinate coordinate){
+        return boardArray[coordinate.getY()][coordinate.getX()].getValue();
+    }
+
 
     public boolean isValidMoveFromLisere(RegularMove regularMove,int lisereValue){
         boolean adverseLicorne = isAdverseLicorne(regularMove);
@@ -236,7 +244,7 @@ public class EscampeBoard implements Partie1 {
 
             case 1:
                 //test if the final case is free or if there is an adverse licorne
-                return this.isFree(regularMove.getEndCoordinate()) &&! adverseLicorne;
+                return this.isFree(regularMove.getEndCoordinate())  || adverseLicorne;
 
 
             case 2:
@@ -279,7 +287,7 @@ public class EscampeBoard implements Partie1 {
                     return false;
                 }
                 else if(regularMove.getMove().equals(new Coordinate(0,3))){
-                    System.out.println("test B2");
+
                     return (this.isFree(new Coordinate(regularMove.getStartCoordinate().getX(),regularMove.getStartCoordinate().getY()+1)) &&
                             this.isFree(new Coordinate(regularMove.getStartCoordinate().getX(),regularMove.getStartCoordinate().getY()+2)));
                 } else if (regularMove.getMove().equals(new Coordinate(0,-3))) {
@@ -378,7 +386,11 @@ public class EscampeBoard implements Partie1 {
         if (this.boardArray[regularMove.getEndCoordinate().getY()][regularMove.getEndCoordinate().getX()].getPiece() != null) {
             if (this.boardArray[regularMove.getEndCoordinate().getY()][regularMove.getEndCoordinate().getX()].getPiece().getPieceType() == PIECE_TYPE.LICORNE) {
                 if (this.boardArray[regularMove.getEndCoordinate().getY()][regularMove.getEndCoordinate().getX()].getPiece().getPlayerTeamColor() != regularMove.getTeamColor()) {
-                    adverseLicorne = true;
+                    //test if the initial case is licorne
+                    if (this.boardArray[regularMove.getStartCoordinate().getY()][regularMove.getStartCoordinate().getX()].getPiece() != null) {
+                        if (this.boardArray[regularMove.getStartCoordinate().getY()][regularMove.getStartCoordinate().getX()].getPiece().getPieceType() != PIECE_TYPE.LICORNE) {
+                            adverseLicorne = true;
+                        }}
                 }
             }
         }
@@ -533,7 +545,7 @@ public class EscampeBoard implements Partie1 {
         try {if (isInBoard(new Coordinate(position.getX() + i, position.getY() + j))) {
             //test if the move is valid
             //test if the end case is free
-            if(!isFree(new Coordinate(position.getX() + i, position.getY() + j))){
+            if(!isFree(new Coordinate(position.getX() + i, position.getY() + j)) && !isAdverseLicorne(new RegularMove(position, new Coordinate(position.getX() + i, position.getY() + j), playerColor))){
                 return index3;
             }
 
@@ -568,6 +580,14 @@ public class EscampeBoard implements Partie1 {
         return boardArray;
     }
 
+    public int getLastLisere() {
+        return lastLisere;
+    }
+
+    public void setLastLisere(int lastLisere) {
+        this.lastLisere = lastLisere;
+    }
+
     public String getWinner(){
         if(BlackTeamWin){
             return "noir";
@@ -589,32 +609,345 @@ public class EscampeBoard implements Partie1 {
         return clone;
     }
 
+    public static void CoordinateTest(){
+        EscampeBoard escampeBoard = new EscampeBoard();
+        //A1
+        Coordinate coordinate = new Coordinate(0,0);
+        assert(Objects.equals(coordinate.toString(), "A1"));
+        assert(new Coordinate("A1").equals(coordinate));
+        assert(new Coordinate("A1").getX()==0);
+        assert(new Coordinate("A1").getY()==0);
+        assert(escampeBoard.getLisereValue(coordinate)==1);
+        assert(escampeBoard.getLisereValue(new Coordinate("A1"))==1);
+        //A2
+        coordinate = new Coordinate(0,1);
+        assert(Objects.equals(coordinate.toString(), "A2"));
+        assert(new Coordinate("A2").equals(coordinate));
+        assert(new Coordinate("A2").getX()==0);
+        assert(new Coordinate("A2").getY()==1);
+        assert(escampeBoard.getLisereValue(coordinate)==3);
+        assert (escampeBoard.getLisereValue(new Coordinate("A2"))==3);
+        //A3
+        coordinate = new Coordinate(0,2);
+        assert(Objects.equals(coordinate.toString(), "A3"));
+        assert(new Coordinate("A3").equals(coordinate));
+        assert(new Coordinate("A3").getX()==0);
+        assert(new Coordinate("A3").getY()==2);
+        assert(escampeBoard.getLisereValue(coordinate)==2);
+        assert(escampeBoard.getLisereValue(new Coordinate("A3"))==2);
+        //A4
+        coordinate = new Coordinate(0,3);
+        assert(Objects.equals(coordinate.toString(), "A4"));
+        assert(new Coordinate("A4").equals(coordinate));
+        assert(new Coordinate("A4").getX()==0);
+        assert(new Coordinate("A4").getY()==3);
+        assert(escampeBoard.getLisereValue(coordinate)==2);
+        assert(escampeBoard.getLisereValue(new Coordinate("A4"))==2);
+        //A5
+        coordinate = new Coordinate(0,4);
+        assert(Objects.equals(coordinate.toString(), "A5"));
+        assert(new Coordinate("A5").equals(coordinate));
+        assert(new Coordinate("A5").getX()==0);
+        assert(new Coordinate("A5").getY()==4);
+        assert(escampeBoard.getLisereValue(coordinate)==1);
+        assert(escampeBoard.getLisereValue(new Coordinate("A5"))==1);
+        //A6
+        coordinate = new Coordinate(0,5);
+        assert(Objects.equals(coordinate.toString(), "A6"));
+        assert(new Coordinate("A6").equals(coordinate));
+        assert(new Coordinate("A6").getX()==0);
+        assert(new Coordinate("A6").getY()==5);
+        assert(escampeBoard.getLisereValue(coordinate)==3);
+        assert(escampeBoard.getLisereValue(new Coordinate("A6"))==3);
+        //B1
+        coordinate = new Coordinate(1,0);
+        assert(Objects.equals(coordinate.toString(), "B1"));
+        assert(new Coordinate("B1").equals(coordinate));
+        assert(new Coordinate("B1").getX()==1);
+        assert(new Coordinate("B1").getY()==0);
+        assert(escampeBoard.getLisereValue(coordinate)==2);
+        assert(escampeBoard.getLisereValue(new Coordinate("B1"))==2);
+        //B2
+        coordinate = new Coordinate(1,1);
+        assert(Objects.equals(coordinate.toString(), "B2"));
+        assert(new Coordinate("B2").equals(coordinate));
+        assert(new Coordinate("B2").getX()==1);
+        assert(new Coordinate("B2").getY()==1);
+        assert(escampeBoard.getLisereValue(coordinate)==1);
+        assert(escampeBoard.getLisereValue(new Coordinate("B2"))==1);
+        //B3
+        coordinate = new Coordinate(1,2);
+        assert(Objects.equals(coordinate.toString(), "B3"));
+        assert(new Coordinate("B3").equals(coordinate));
+        assert(new Coordinate("B3").getX()==1);
+        assert(new Coordinate("B3").getY()==2);
+        assert(escampeBoard.getLisereValue(coordinate)==3);
+        assert(escampeBoard.getLisereValue(new Coordinate("B3"))==3);
+        //B4
+        coordinate = new Coordinate(1,3);
+        assert(Objects.equals(coordinate.toString(), "B4"));
+        assert(new Coordinate("B4").equals(coordinate));
+        assert(new Coordinate("B4").getX()==1);
+        assert(new Coordinate("B4").getY()==3);
+        assert(escampeBoard.getLisereValue(coordinate)==1);
+        assert(escampeBoard.getLisereValue(new Coordinate("B4"))==1);
+        //B5
+        coordinate = new Coordinate(1,4);
+        assert(Objects.equals(coordinate.toString(), "B5"));
+        assert(new Coordinate("B5").equals(coordinate));
+        assert(new Coordinate("B5").getX()==1);
+        assert(new Coordinate("B5").getY()==4);
+        assert(escampeBoard.getLisereValue(coordinate)==3);
+        assert(escampeBoard.getLisereValue(new Coordinate("B5"))==3);
+        //B6
+        coordinate = new Coordinate(1,5);
+        assert(Objects.equals(coordinate.toString(), "B6"));
+        assert(new Coordinate("B6").equals(coordinate));
+        assert(new Coordinate("B6").getX()==1);
+        assert(new Coordinate("B6").getY()==5);
+        assert(escampeBoard.getLisereValue(coordinate)==2);
+        assert(escampeBoard.getLisereValue(new Coordinate("B6"))==2);
+        //C1
+        coordinate = new Coordinate(2,0);
+        assert(Objects.equals(coordinate.toString(), "C1"));
+        assert(new Coordinate("C1").equals(coordinate));
+        assert(new Coordinate("C1").getX()==2);
+        assert(new Coordinate("C1").getY()==0);
+        assert(escampeBoard.getLisereValue(coordinate)==2);
+        assert(escampeBoard.getLisereValue(new Coordinate("C1"))==2);
+        //C2
+        coordinate = new Coordinate(2,1);
+        assert(Objects.equals(coordinate.toString(), "C2"));
+        assert(new Coordinate("C2").equals(coordinate));
+        assert(new Coordinate("C2").getX()==2);
+        assert(new Coordinate("C2").getY()==1);
+        assert(escampeBoard.getLisereValue(coordinate)==3);
+        assert(escampeBoard.getLisereValue(new Coordinate("C2"))==3);
+        //C3
+        coordinate = new Coordinate(2,2);
+        assert(Objects.equals(coordinate.toString(), "C3"));
+        assert(new Coordinate("C3").equals(coordinate));
+        assert(new Coordinate("C3").getX()==2);
+        assert(new Coordinate("C3").getY()==2);
+        assert(escampeBoard.getLisereValue(coordinate)==1);
+        assert(escampeBoard.getLisereValue(new Coordinate("C3"))==1);
+        //C4
+        coordinate = new Coordinate(2,3);
+        assert(Objects.equals(coordinate.toString(), "C4"));
+        assert(new Coordinate("C4").equals(coordinate));
+        assert(new Coordinate("C4").getX()==2);
+        assert(new Coordinate("C4").getY()==3);
+        assert(escampeBoard.getLisereValue(coordinate)==3);
+        assert(escampeBoard.getLisereValue(new Coordinate("C4"))==3);
+        //C5
+        coordinate = new Coordinate(2,4);
+        assert(Objects.equals(coordinate.toString(), "C5"));
+        assert(new Coordinate("C5").equals(coordinate));
+        assert(new Coordinate("C5").getX()==2);
+        assert(new Coordinate("C5").getY()==4);
+        assert(escampeBoard.getLisereValue(coordinate)==1);
+        assert(escampeBoard.getLisereValue(new Coordinate("C5"))==1);
+        //C6
+        coordinate = new Coordinate(2,5);
+        assert(Objects.equals(coordinate.toString(), "C6"));
+        assert(new Coordinate("C6").equals(coordinate));
+        assert(new Coordinate("C6").getX()==2);
+        assert(new Coordinate("C6").getY()==5);
+        assert(escampeBoard.getLisereValue(coordinate)==2);
+        assert(escampeBoard.getLisereValue(new Coordinate("C6"))==2);
+        //D1
+        coordinate = new Coordinate(3,0);
+        assert(Objects.equals(coordinate.toString(), "D1"));
+        assert(new Coordinate("D1").equals(coordinate));
+        assert(new Coordinate("D1").getX()==3);
+        assert(new Coordinate("D1").getY()==0);
+        assert(escampeBoard.getLisereValue(coordinate)==3);
+        assert(escampeBoard.getLisereValue(new Coordinate("D1"))==3);
+        //D2
+        coordinate = new Coordinate(3,1);
+        assert(Objects.equals(coordinate.toString(), "D2"));
+        assert(new Coordinate("D2").equals(coordinate));
+        assert(new Coordinate("D2").getX()==3);
+        assert(new Coordinate("D2").getY()==1);
+        assert(escampeBoard.getLisereValue(coordinate)==1);
+        assert(escampeBoard.getLisereValue(new Coordinate("D2"))==1);
+        //D3
+        coordinate = new Coordinate(3,2);
+        assert(Objects.equals(coordinate.toString(), "D3"));
+        assert(new Coordinate("D3").equals(coordinate));
+        assert(new Coordinate("D3").getX()==3);
+        assert(new Coordinate("D3").getY()==2);
+        assert(escampeBoard.getLisereValue(coordinate)==2);
+        assert(escampeBoard.getLisereValue(new Coordinate("D3"))==2);
+        //D4
+        coordinate = new Coordinate(3,3);
+        assert(Objects.equals(coordinate.toString(), "D4"));
+        assert(new Coordinate("D4").equals(coordinate));
+        assert(new Coordinate("D4").getX()==3);
+        assert(new Coordinate("D4").getY()==3);
+        assert(escampeBoard.getLisereValue(coordinate)==2);
+        assert(escampeBoard.getLisereValue(new Coordinate("D4"))==2);
+        //D5
+        coordinate = new Coordinate(3,4);
+        assert(Objects.equals(coordinate.toString(), "D5"));
+        assert(new Coordinate("D5").equals(coordinate));
+        assert(new Coordinate("D5").getX()==3);
+        assert(new Coordinate("D5").getY()==4);
+        assert(escampeBoard.getLisereValue(coordinate)==3);
+        assert(escampeBoard.getLisereValue(new Coordinate("D5"))==3);
+        //D6
+        coordinate = new Coordinate(3,5);
+        assert(Objects.equals(coordinate.toString(), "D6"));
+        assert(new Coordinate("D6").equals(coordinate));
+        assert(new Coordinate("D6").getX()==3);
+        assert(new Coordinate("D6").getY()==5);
+        assert(escampeBoard.getLisereValue(coordinate)==1);
+        assert(escampeBoard.getLisereValue(new Coordinate("D6"))==1);
+        //E1
+        coordinate = new Coordinate(4,0);
+        assert(Objects.equals(coordinate.toString(), "E1"));
+        assert(new Coordinate("E1").equals(coordinate));
+        assert(new Coordinate("E1").getX()==4);
+        assert(new Coordinate("E1").getY()==0);
+        assert(escampeBoard.getLisereValue(coordinate)==1);
+        assert(escampeBoard.getLisereValue(new Coordinate("E1"))==1);
+        //E2
+        coordinate = new Coordinate(4,1);
+        assert(Objects.equals(coordinate.toString(), "E2"));
+        assert(new Coordinate("E2").equals(coordinate));
+        assert(new Coordinate("E2").getX()==4);
+        assert(new Coordinate("E2").getY()==1);
+        assert(escampeBoard.getLisereValue(coordinate)==3);
+        assert(escampeBoard.getLisereValue(new Coordinate("E2"))==3);
+        //E3
+        coordinate = new Coordinate(4,2);
+        assert(Objects.equals(coordinate.toString(), "E3"));
+        assert(new Coordinate("E3").equals(coordinate));
+        assert(new Coordinate("E3").getX()==4);
+        assert(new Coordinate("E3").getY()==2);
+        assert(escampeBoard.getLisereValue(coordinate)==1);
+        assert(escampeBoard.getLisereValue(new Coordinate("E3"))==1);
+        //E4
+        coordinate = new Coordinate(4,3);
+        assert(Objects.equals(coordinate.toString(), "E4"));
+        assert(new Coordinate("E4").equals(coordinate));
+        assert(new Coordinate("E4").getX()==4);
+        assert(new Coordinate("E4").getY()==3);
+        assert(escampeBoard.getLisereValue(coordinate)==3);
+        assert(escampeBoard.getLisereValue(new Coordinate("E4"))==3);
+        //E5
+        coordinate = new Coordinate(4,4);
+        assert(Objects.equals(coordinate.toString(), "E5"));
+        assert(new Coordinate("E5").equals(coordinate));
+        assert(new Coordinate("E5").getX()==4);
+        assert(new Coordinate("E5").getY()==4);
+        assert(escampeBoard.getLisereValue(coordinate)==1);
+        assert(escampeBoard.getLisereValue(new Coordinate("E5"))==1);
+        //E6
+        coordinate = new Coordinate(4,5);
+        assert(Objects.equals(coordinate.toString(), "E6"));
+        assert(new Coordinate("E6").equals(coordinate));
+        assert(new Coordinate("E6").getX()==4);
+        assert(new Coordinate("E6").getY()==5);
+        assert(escampeBoard.getLisereValue(coordinate)==3);
+        assert(escampeBoard.getLisereValue(new Coordinate("E6"))==3);
+        //F1
+        coordinate = new Coordinate(5,0);
+        assert(Objects.equals(coordinate.toString(), "F1"));
+        assert(new Coordinate("F1").equals(coordinate));
+        assert(new Coordinate("F1").getX()==5);
+        assert(new Coordinate("F1").getY()==0);
+        assert(escampeBoard.getLisereValue(coordinate)==2);
+        assert(escampeBoard.getLisereValue(new Coordinate("F1"))==2);
+        //F2
+        coordinate = new Coordinate(5,1);
+        assert(Objects.equals(coordinate.toString(), "F2"));
+        assert(new Coordinate("F2").equals(coordinate));
+        assert(new Coordinate("F2").getX()==5);
+        assert(new Coordinate("F2").getY()==1);
+        assert(escampeBoard.getLisereValue(coordinate)==2);
+        assert(escampeBoard.getLisereValue(new Coordinate("F2"))==2);
+        //F3
+        coordinate = new Coordinate(5,2);
+        assert(Objects.equals(coordinate.toString(), "F3"));
+        assert(new Coordinate("F3").equals(coordinate));
+        assert(new Coordinate("F3").getX()==5);
+        assert(new Coordinate("F3").getY()==2);
+        assert(escampeBoard.getLisereValue(coordinate)==3);
+        assert(escampeBoard.getLisereValue(new Coordinate("F3"))==3);
+        //F4
+        coordinate = new Coordinate(5,3);
+        assert(Objects.equals(coordinate.toString(), "F4"));
+        assert(new Coordinate("F4").equals(coordinate));
+        assert(new Coordinate("F4").getX()==5);
+        assert(new Coordinate("F4").getY()==3);
+        assert(escampeBoard.getLisereValue(coordinate)==1);
+        assert(escampeBoard.getLisereValue(new Coordinate("F4"))==1);
+        //F5
+        coordinate = new Coordinate(5,4);
+        assert(Objects.equals(coordinate.toString(), "F5"));
+        assert(new Coordinate("F5").equals(coordinate));
+        assert(new Coordinate("F5").getX()==5);
+        assert(new Coordinate("F5").getY()==4);
+        assert(escampeBoard.getLisereValue(coordinate)==2);
+        assert(escampeBoard.getLisereValue(new Coordinate("F5"))==2);
+        //F6
+        coordinate = new Coordinate(5,5);
+        assert(Objects.equals(coordinate.toString(), "F6"));
+        assert(new Coordinate("F6").equals(coordinate));
+        assert(new Coordinate("F6").getX()==5);
+        assert(new Coordinate("F6").getY()==5);
+        assert(escampeBoard.getLisereValue(coordinate)==2);
+        assert(escampeBoard.getLisereValue(new Coordinate("F6"))==2);
+
+
+
+
+
+
+
+        System.out.println("Coordinate test");
+
+        //A1
+
+
+
+
+
+    }
+
     //PUBLIC STATIC MAIN
     public static void main(String[] args) {
-
         //TODO make a test for the class
+        EscampeBoard.CoordinateTest();
         EscampeBoard escampeBoard = new EscampeBoard();
+
+
+
+
+
+
+
 
         //Debugging prints
         Printinator.printBoard(escampeBoard.getBoardArray(), "Lisere map :");
-        Printinator.printLineSpace();
+
+
+        escampeBoard.setFromFile("src/demo2_board.txt");
         Printinator.printBoardWithPion(escampeBoard.getBoardArray(), null);
 
-        escampeBoard.setFromFile("src/demo1_board.txt");
-        Printinator.printBoardWithPion(escampeBoard.getBoardArray(), null);
+        //get the possible moves for the black team
+        String[] possibleMoves = escampeBoard.possiblesMoves("blanc");
 
-        escampeBoard.play("B5-A5", "noir");
-        Printinator.printBoardWithPion(escampeBoard.getBoardArray(), null);
-        //test if the game is over
-        System.out.println(escampeBoard.gameOver());
+        //print the possible moves
+        for (String move : possibleMoves) {
+            System.out.println(move);
+        }
 
-        //Debugging prints
-        Printinator.printLineSpace();
-        Printinator.printBoard(escampeBoard.getBoardArray(), "Board after load file :");
-       //tes possible move for black in F5
-        RegularMove[] movesB2 = escampeBoard.possibleMovesPaw(TEAM_COLOR.WHITE_TEAM,new Coordinate("B2"));
-        Printinator.printPossibleMoves(movesB2, escampeBoard.getBoardArray(), "Possible moves : ");
-        System.out.println("possible moves :");
+
+
+
+
 
 
 

@@ -68,11 +68,20 @@ public class JoueurIntelligent implements IJoueur {
             board.play(upperStart, TEAM_COLOR.getTeamColorStringFromTeamColor(playerColor));
             return upperStart;
         }
+        System.out.println("Current lisere before coup : " + board.getLastLisere());
         Node state = new Node("E", 0, 3, board, TEAM_COLOR.getTeamColorStringFromTeamColor(playerColor));
         String move = state.getBestMove();
         if(!move.equals("E")) {
             board.play(move, TEAM_COLOR.getTeamColorStringFromTeamColor(playerColor));
+            board.setLastLisere(board.getLisereValue(new Coordinate(move.substring(3, 5))));
+
         }
+
+        System.out.println("Played Coup : " + move);
+        System.out.println("Current lisere after coup : " + board.getLastLisere());
+        System.out.println("Current board :" );
+        Printinator.printBoardWithPion(board.getBoardArray(),null);
+        System.out.println("-------------------");
         return move;
     }
 
@@ -80,19 +89,33 @@ public class JoueurIntelligent implements IJoueur {
     public void declareLeVainqueur(int colour) {
         TEAM_COLOR winningCollor = TEAM_COLOR.getTeamColorFromInt(colour);
         if (winningCollor == playerColor) {
-            System.out.println("What a beautiful day, I have zero problems in life \uD83E\uDD13 !");
+            System.out.println("(Smart player) What a beautiful day, I have zero problems in life \uD83E\uDD13 !");
         } else {
-            System.out.println("What a terrible day, I have only problems in life \uD83D\uDE3E !");
+            System.out.println("(Smart player) What a terrible day, I have only problems in life \uD83D\uDE3E !");
         }
     }
 
     @Override
     public void mouvementEnnemi(String coup) {
         System.out.println("Coup ennemi : " + coup);
+
         TEAM_COLOR ennemiColor = TEAM_COLOR.getOppositeTeamColor(playerColor);
         if(!coup.equals("E")) {
+
             board.play(coup, TEAM_COLOR.getTeamColorStringFromTeamColor(ennemiColor));
+
+            //test the number of played coups
+            if(board.playedCoups() >= 3){
+                System.out.println(coup.substring(3, 5));
+                System.out.println("liseré de fin du coup                                          :"+board.getLisereValue(new Coordinate(coup.substring(3, 5))));
+                board.setLastLisere(board.getLisereValue(new Coordinate(coup.substring(3, 5))));
+            }
         }
+                System.out.println("Current lisere after adverse coup                               :" + board.getLastLisere());
+        System.out.println("Current board after adverse coup :");
+        Printinator.printBoardWithPion(board.getBoardArray(),null);
+
+        System.out.println("-------------------");
     }
 
     @Override
